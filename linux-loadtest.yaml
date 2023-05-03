@@ -9,10 +9,8 @@ parameters:
 jobs:
 - deployment: VMDeploy
   displayName: BoldBI
-  pool:
-    vmImage: 'Ubuntu-latest'
   environment:
-    name: 
+    name: Loadtest-VM
     resourceType: VirtualMachine
   strategy:
       runOnce:
@@ -36,7 +34,7 @@ jobs:
                 else
                 echo "Fresh Installation"
                 chmod +x install-boldbi.sh
-                sudo bash install-boldbi.sh -i new -u root -h https://hotfix-linux.boldbi.com -n true
+                sudo bash install-boldbi.sh -i new -u root -h http://20.102.96.134 -n true
                 fi
                 cd ~
                 sudo rm -rf boldbi
