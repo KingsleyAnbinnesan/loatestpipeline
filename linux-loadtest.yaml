@@ -27,7 +27,7 @@ jobs:
                 echo "Syncfusion@123" | sudo -S mkdir boldbi
                 cd boldbi 
                 sudo wget --no-check-certificate '${{parameters.package_link}}'
-                sudo unzip BoldBIEnterpriseEdition_Linux_*
+                sudo unzip BoldBIEnterpriseEdition_Linux*
                 cd BoldBIEnterpriseEdition-Linux
                 if [ -d /var/www/bold-services ]; then
                 echo "Upgrade Command"
