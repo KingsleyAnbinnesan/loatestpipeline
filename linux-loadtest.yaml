@@ -9,6 +9,8 @@ parameters:
 jobs:
 - deployment: VMDeploy
   displayName: BoldBI
+  pool:
+    vmImage: 'Ubuntu-latest'
   environment:
     name: Loadtest-VM
     resourceType: VirtualMachine
