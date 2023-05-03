@@ -24,7 +24,7 @@ jobs:
               script: |
                 cd ~
                 ls
-                echo "Admin@123" | sudo -S mkdir boldbi
+                echo "Syncfusion@123" | sudo -S mkdir boldbi
                 cd boldbi 
                 sudo wget --no-check-certificate '${{parameters.package_link}}'
                 sudo unzip BoldBIEnterpriseEdition_Linux_*
