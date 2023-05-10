@@ -32,8 +32,8 @@ jobs:
               --nsg-rule SSH \
               --nsg-rule RDP \
               --public-ip-address-allocation static
-            az vm run-command invoke \
-              -g azurepipeline \
+            az vm run-command invoke -g azurepipeline \
               -n windows \
               --command-id RunPowerShellScript \
-              --scripts "Install-WindowsFeature -name Web-Server -IncludeManagementTools"  
+              --scripts "Install-WindowsFeature -name Web-Server -IncludeManagementTools"
+            az vm open-port --port 80 --resource-group azurepipeline --name windows
