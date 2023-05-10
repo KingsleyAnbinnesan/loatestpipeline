@@ -24,7 +24,7 @@ jobs:
             az vm create \
               --resource-group azurepipeline \
               --name windows \
-              --image microsoft-ads:windows-10:windows-10:pro:20h2-pro \
+              --image MicrosoftWindowsDesktop:Windows-10:win10-21h2-pro-g2:V2 \
               --public-ip-sku Standard \
               --size Standard_D2s_v3 \
               --admin-username syncfusion \
