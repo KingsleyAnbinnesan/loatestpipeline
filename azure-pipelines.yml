@@ -17,7 +17,7 @@ jobs:
       - task: AzureCLI@2
         displayName: 'Create Azure VM'
         inputs:
-          azureSubscription: 'SF3816-BoldBI-SQLDS-RavikumarSelvaraj'
+          azureSubscription: 'SF3358-Bold BI-DevOps-Ranjithkumar'
           scriptType: 'bash'
           scriptLocation: 'inlineScript'
           inlineScript: |
@@ -25,7 +25,7 @@ jobs:
               --resource-group azurepipeline \
               --name windows \
               --image Windows 10 Pro, version 22H2 - x64 Gen2 \
-              --size Standard_D8s_v3 \
+              --size Standard_D2s_v3 \
               --admin-username syncfusion \
               --admin-password Syncfusion@123 \
               --nsg-rule SSH \
