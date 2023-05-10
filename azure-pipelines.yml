@@ -17,7 +17,7 @@ jobs:
       - task: AzureCLI@2
         displayName: 'Create Azure VM'
         inputs:
-          azureSubscription: 'SF3358-Bold BI-DevOps-Ranjithkumar'
+          azureSubscription: 'windowsVM-azurepipeline'
           scriptType: 'bash'
           scriptLocation: 'inlineScript'
           inlineScript: |
