@@ -30,5 +30,4 @@ jobs:
               --admin-password Syncfusion@123 \
               --nsg-rule SSH \
               --nsg-rule RDP \
-              --nsg-rule HTTP \
               --public-ip-address-allocation static
