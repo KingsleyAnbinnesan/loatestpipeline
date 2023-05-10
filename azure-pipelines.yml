@@ -24,7 +24,7 @@ jobs:
             az vm create \
               --resource-group azurepipeline \
               --name windows \
-              --image Windows 10 Pro, version 22H2 - x64 Gen2 \
+              --image Win2019Datacenter \
               --size Standard_D2s_v3 \
               --admin-username syncfusion \
               --admin-password Syncfusion@123 \
