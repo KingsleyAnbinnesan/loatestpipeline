@@ -46,9 +46,16 @@ jobs:
               --name CustomScriptExtension \
               --publisher Microsoft.Compute \
               --settings '{"commandToExecute":"powershell Enable-WindowsOptionalFeature -Online -FeatureName IIS-ManagementConsole -All"}'
+      - task: AzureCLI@2
+        displayName: 'Downloading Bold BI Application'
+        inputs:
+          azureSubscription: 'windowsVM-azurepipeline'
+          scriptType: 'bash'
+          scriptLocation: 'inlineScript'
+          inlineScript: |
             az vm extension set \
               --resource-group azurepipeline \
               --vm-name windows \
               --name CustomScriptExtension \
               --publisher Microsoft.Compute \
-              --settings '{"commandToExecute":"powershell Invoke-WebRequest -Uri https://s3.amazonaws.com/files2.syncfusion.com/Installs/Bold/BoldBI/v6.2.7/BoldBIEnterpriseEdition.exe"}'  
+              --settings '{"commandToExecute":"powershell -ExecutionPolicy Unrestricted -Command \"& { (New-Object System.Net.WebClient).DownloadFile(\'https://s3.amazonaws.com/files2.syncfusion.com/Installs/Bold/BoldBI/v6.2.7/BoldBIEnterpriseEdition.exe\', \'C:\\temp\\<file name>.exe\') }\" }"'
