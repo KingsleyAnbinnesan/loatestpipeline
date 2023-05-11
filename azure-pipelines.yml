@@ -32,9 +32,23 @@ jobs:
               --nsg-rule SSH \
               --nsg-rule RDP \
               --public-ip-address-allocation static
-      - task: PowerShellOnTargetMachines@3
+      - task: AzurePowerShell@5
+        displayName: 'Connect to Windows VM and Install IIS'
         inputs:
-          Machines: '$ipAddress = [System.Net.Dns]::GetHostEntry($env:windows).AddressList.IPAddressToString'
-          UserName: 'syncfusion'
-          UserPassword: 'Syncfusion@123'
-          InlineScript: 'Enable-WindowsOptionalFeature -Online -FeatureName IIS-ManagementConsole -All'
+          azureSubscription: '$(azureSubscription)'
+          scriptType: 'InlineScript'
+          inline: |
+            # Get the public IP address of the VM
+            $publicIp = (Get-AzPublicIpAddress -ResourceGroupName $(resourceGroupName) -Name $(publicIpAddressName)).IpAddress
+
+            # Create a new Remote Desktop session to the VM
+            $username = 'syncfusion'
+            $password = 'Syncfusion@123'
+            $securePassword = ConvertTo-SecureString -String $password -AsPlainText -Force
+            $credential = New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList $username, $securePassword
+            $session = New-PSSession -ComputerName $publicIp -Credential $credential
+
+            # Install IIS on the VM using the remote session
+            Invoke-Command -Session $session -ScriptBlock {
+            Enable-WindowsOptionalFeature -Online -FeatureName IIS-ManagementConsole -All
+            }
