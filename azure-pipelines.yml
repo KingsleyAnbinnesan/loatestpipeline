@@ -33,5 +33,5 @@ jobs:
               --nsg-rule SSH \
               --nsg-rule RDP \
               --public-ip-address-allocation static   
-            test = $(az network public-ip show --resource-group azurepipeline --name myipnew --query ipAddress -otsv)
-            echo "ip = $test"
+            ipAddress=$(az network public-ip show --resource-group azurepipeline --name myipnew --query ipAddress -otsv)
+            echo "##vso[task.setvariable variable=PublicIpAddress]$ipAddress"
