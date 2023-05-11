@@ -45,31 +45,10 @@ jobs:
               --vm-name windows \
               --name CustomScriptExtension \
               --publisher Microsoft.Compute \
-              --settings '{"commandToExecute":"powershell Enable-WindowsOptionalFeature -Online -FeatureName IIS-ManagementConsole -All"}'         
-      - task: AzureCLI@2
-        displayName: 'Get VM Public IP'
-        inputs:
-          azureSubscription: 'windowsVM-azurepipeline'
-          scriptType: 'bash'
-          scriptLocation: 'inlineScript'
-          inlineScript: |
-            ipAddress=$(az network public-ip show --resource-group azurepipeline --name myipnew --query ipAddress -otsv)
-            echo "##vso[task.setvariable variable=PublicIpAddress]$ipAddress"
-      - task: PowerShell@2
-        displayName: 'Execute PowerShell Script on VM'
-        inputs:
-          targetType: 'inline'
-          script: |
-            $username = 'syncfusion'
-            $password = 'Syncfusion@123'
-            $ipAddress = '$(PublicIpAddress)'
-      
-            # Connect to VM using WinRM
-            $securePassword = ConvertTo-SecureString -String Syncfusion@123 -AsPlainText -Force
-            $cred = New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList syncfusion, $securePassword
-      
-            $session = New-PSSession -ComputerName $(PublicIpAddress) -Credential $cred
-            Invoke-Command -Session $session -ScriptBlock {
-            # Commands to execute on the VM
-            Enable-WindowsOptionalFeature -Online -FeatureName IIS-ManagementConsole -All
-            }         
+              --settings '{"commandToExecute":"powershell Enable-WindowsOptionalFeature -Online -FeatureName IIS-ManagementConsole -All"}'
+            az vm extension set \
+              --resource-group azurepipeline \
+              --vm-name windows \
+              --name CustomScriptExtension \
+              --publisher Microsoft.Compute \
+              --settings '{"commandToExecute":"powershell Invoke-WebRequest -Uri https://s3.amazonaws.com/files2.syncfusion.com/Installs/Bold/BoldBI/v6.2.7/BoldBIEnterpriseEdition.exe"}'  
