@@ -58,4 +58,4 @@ jobs:
               --vm-name windows \
               --name CustomScriptExtension \
               --publisher Microsoft.Compute \
-              --settings '{"commandToExecute":"powershell -ExecutionPolicy Unrestricted -Command \"& { (New-Object System.Net.WebClient).DownloadFile(\'https://s3.amazonaws.com/files2.syncfusion.com/Installs/Bold/BoldBI/v6.2.7/BoldBIEnterpriseEdition.exe\', \'C:\\temp\\<file name>.exe\') }\" }"'
+              --settings '{"commandToExecute":"powershell -ExecutionPolicy Unrestricted -Command \"& { (New-Object System.Net.WebClient).DownloadFile(\'https://s3.amazonaws.com/files2.syncfusion.com/Installs/Bold/BoldBI/v6.2.7/BoldBIEnterpriseEdition.exe\', \'C:\\\\temp\\\\BoldBIEnterpriseEdition.exe\') }\" }"'
