@@ -23,22 +23,25 @@ jobs:
           inlineScript: |
             az vm create \
               --resource-group azurepipeline \
-              --name windows \
+              --name windows1 \
               --image MicrosoftWindowsDesktop:Windows-10:win10-21h2-pro-g2:19044.2364.221205 \
               --public-ip-sku Standard \
-              --public-ip-address myipnew \
+              --public-ip-address myipnew1 \
               --size Standard_D2s_v3 \
               --admin-username syncfusion \
               --admin-password Syncfusion@123 \
               --nsg-rule SSH \
               --nsg-rule RDP \
-              --public-ip-address-allocation static     
+              --public-ip-address-allocation static   
+            $ipAddress = az vm show -d --resource-group azurepipeline --name windows1 --query publicIps --output tsv 
+            echo "$ipAddress"      
       - task: AzureCLI@2
         inputs:
           azureSubscription: 'windowsVM-azurepipeline'
           scriptType: 'bash'
           scriptLocation: 'inlineScript'
           inlineScript: |
+            az network public-ip show --resource-group azurepipeline --name myipnew --query ipAddress -otsv
             # Get the public IP address of the VM
             $publicIp = (Get-AzPublicIpAddress -ResourceGroupName azurepipeline -Name myipnew).IpAddress
             
