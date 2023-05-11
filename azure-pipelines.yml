@@ -24,9 +24,9 @@ jobs:
             az vm create \
               --resource-group azurepipeline \
               --name windows \
-              --public-ip-address-name myipnew
               --image MicrosoftWindowsDesktop:Windows-10:win10-21h2-pro-g2:19044.2364.221205 \
               --public-ip-sku Standard \
+              --public-ip-address myipnew \
               --size Standard_D2s_v3 \
               --admin-username syncfusion \
               --admin-password Syncfusion@123 \
