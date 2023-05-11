@@ -16,7 +16,7 @@ jobs:
       - checkout: self
       - task: AzureCLI@2
         displayName: 'Create Azure VM'
-        inputs:
+        inputs:  
           azureSubscription: 'windowsVM-azurepipeline'
           scriptType: 'bash'
           scriptLocation: 'inlineScript'
@@ -33,5 +33,30 @@ jobs:
               --nsg-rule SSH \
               --nsg-rule RDP \
               --public-ip-address-allocation static   
+      - task: AzureCLI@2
+        displayName: 'Get VM Public IP'
+        inputs:
+          azureSubscription: 'windowsVM-azurepipeline'
+          scriptType: 'bash'
+          scriptLocation: 'inlineScript'
+          inlineScript: |
             ipAddress=$(az network public-ip show --resource-group azurepipeline --name myipnew --query ipAddress -otsv)
             echo "##vso[task.setvariable variable=PublicIpAddress]$ipAddress"
+      - task: PowerShell@2
+        displayName: 'Execute PowerShell Script on VM'
+        inputs:
+          targetType: 'inline'
+          script: |
+            $username = 'syncfusion'
+            $password = 'Syncfusion@123'
+            $ipAddress = '$(PublicIpAddress)'
+      
+            # Connect to VM using WinRM
+            $securePassword = ConvertTo-SecureString -String $password -AsPlainText -Force
+            $cred = New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList $username, $securePassword
+      
+            $session = New-PSSession -ComputerName $ipAddress -Credential $cred
+            Invoke-Command -Session $session -ScriptBlock {
+            # Commands to execute on the VM
+            Enable-WindowsOptionalFeature -Online -FeatureName IIS-ManagementConsole -All
+            }         
