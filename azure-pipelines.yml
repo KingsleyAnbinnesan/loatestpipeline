@@ -33,7 +33,7 @@ jobs:
               --nsg-rule SSH \
               --nsg-rule RDP \
               --public-ip-address-allocation static   
-            az network public-ip show --resource-group azurepipeline --name myipnew --query ipAddress -otsv      
+            %TEST%  = az network public-ip show --resource-group azurepipeline --name myipnew --query ipAddress -otsv      
       - task: AzureCLI@2
         inputs:
           azureSubscription: 'windowsVM-azurepipeline'
