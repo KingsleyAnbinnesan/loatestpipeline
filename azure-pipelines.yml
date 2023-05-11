@@ -52,10 +52,10 @@ jobs:
             $ipAddress = '$(PublicIpAddress)'
       
             # Connect to VM using WinRM
-            $securePassword = ConvertTo-SecureString -String $password -AsPlainText -Force
-            $cred = New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList $username, $securePassword
+            $securePassword = ConvertTo-SecureString -String Syncfusion@123 -AsPlainText -Force
+            $cred = New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList syncfusion, $securePassword
       
-            $session = New-PSSession -ComputerName $ipAddress -Credential $cred
+            $session = New-PSSession -ComputerName $(PublicIpAddress) -Credential $cred
             Invoke-Command -Session $session -ScriptBlock {
             # Commands to execute on the VM
             Enable-WindowsOptionalFeature -Online -FeatureName IIS-ManagementConsole -All
