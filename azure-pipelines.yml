@@ -23,17 +23,17 @@ jobs:
           inlineScript: |
             az vm create \
               --resource-group azurepipeline \
-              --name windows \
+              --name windows2 \
               --image MicrosoftWindowsDesktop:Windows-10:win10-21h2-pro-g2:19044.2364.221205 \
               --public-ip-sku Standard \
-              --public-ip-address myipnew \
+              --public-ip-address myipnew2 \
               --size Standard_D2s_v3 \
               --admin-username syncfusion \
               --admin-password Syncfusion@123 \
               --nsg-rule SSH \
               --nsg-rule RDP \
               --public-ip-address-allocation static   
-            %TEST%  = az network public-ip show --resource-group azurepipeline --name myipnew --query ipAddress -otsv      
+            %TEST%  = az network public-ip show --resource-group azurepipeline --name myipnew2 --query ipAddress -otsv      
 
       - task: CmdLine@2
         inputs:
@@ -44,4 +44,4 @@ jobs:
           scriptType: 'bash'
           scriptLocation: 'inlineScript'
           inlineScript: |
-            az network public-ip show --resource-group azurepipeline --name myipnew --query ipAddress -otsv
+            az network public-ip show --resource-group azurepipeline --name myipnew2 --query ipAddress -otsv
