@@ -45,7 +45,7 @@ jobs:
               --vm-name windows \
               --name CustomScriptExtension \
               --publisher Microsoft.Compute \
-              --settings '{"commandToExecute":"powershell Add-WindowsFeature Web-Server"}'         
+              --settings '{"commandToExecute":"powershell Enable-WindowsOptionalFeature -Online -FeatureName IIS-ManagementConsole -All"}'         
       - task: AzureCLI@2
         displayName: 'Get VM Public IP'
         inputs:
