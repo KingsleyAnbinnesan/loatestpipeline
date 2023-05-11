@@ -32,3 +32,17 @@ jobs:
               --nsg-rule SSH \
               --nsg-rule RDP \
               --public-ip-address-allocation static
+      - task: AzureCLI@2
+        displayName: 'Install BoldBI'
+        inputs:
+          azureSubscription: 'windowsVM-azurepipeline'
+          scriptType: 'bash'
+          scriptLocation: 'inlineScript'
+          inlineScript: |
+            az vm extension set \
+              --resource-group azurepipeline \
+              --vm-name windows \
+              --name CustomScriptExtension \
+              --publisher Microsoft.Azure.Extensions \
+              --version 2.0 \
+              --settings '{"commandToExecute":"powershell.exe Invoke-WebRequest -Uri https://s3.amazonaws.com/files2.syncfusion.com/Installs/Bold/BoldBI/v6.2.7/BoldBIEnterpriseEdition.exe"}'
