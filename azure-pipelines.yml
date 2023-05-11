@@ -32,7 +32,20 @@ jobs:
               --admin-password Syncfusion@123 \
               --nsg-rule SSH \
               --nsg-rule RDP \
-              --public-ip-address-allocation static   
+              --public-ip-address-allocation static  
+      - task: AzureCLI@2
+        displayName: 'Install IIS Manager'
+        inputs:
+          azureSubscription: 'windowsVM-azurepipeline'
+          scriptType: 'bash'
+          scriptLocation: 'inlineScript'
+          inlineScript: |
+            az vm extension set \
+              --resource-group azurepipeline \
+              --vm-name windows \
+              --name CustomScriptExtension \
+              --publisher Microsoft.Compute \
+              --settings '{"commandToExecute":"powershell Add-WindowsFeature Web-Server"}'         
       - task: AzureCLI@2
         displayName: 'Get VM Public IP'
         inputs:
