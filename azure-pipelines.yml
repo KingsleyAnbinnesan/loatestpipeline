@@ -24,6 +24,7 @@ jobs:
             az vm create \
               --resource-group azurepipeline \
               --name windows \
+              --public-ip-address-name myipnew
               --image MicrosoftWindowsDesktop:Windows-10:win10-21h2-pro-g2:19044.2364.221205 \
               --public-ip-sku Standard \
               --size Standard_D2s_v3 \
@@ -35,11 +36,11 @@ jobs:
       - task: AzurePowerShell@5
         displayName: 'Connect to Windows VM and Install IIS'
         inputs:
-          azureSubscription: '$(azureSubscription)'
+          azureSubscription: 'windowsVM-azurepipeline'
           scriptType: 'InlineScript'
           inline: |
             # Get the public IP address of the VM
-            $publicIp = (Get-AzPublicIpAddress -ResourceGroupName $(resourceGroupName) -Name $(publicIpAddressName)).IpAddress
+            $publicIp = (Get-AzPublicIpAddress -ResourceGroupName azurepipeline -Name myipnew).IpAddress
 
             # Create a new Remote Desktop session to the VM
             $username = 'syncfusion'
