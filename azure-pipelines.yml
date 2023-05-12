@@ -33,9 +33,3 @@ jobs:
               --nsg-rule RDP \
               --public-ip-address-allocation static
               --license-type Windows_Server
-            az network nsg create --resource-group azurepipeline --name newip
-            # Open port 80
-            az network nsg rule create --resource-group azurepipeline --nsg-name newip --name AllowHTTP --priority 100 --destination-port-ranges 80 --access Allow --protocol Tcp
-      
-            # Open port 443
-            az network nsg rule create --resource-group azurepipeline --nsg-name newip --name AllowHTTPS --priority 101 --destination-port-ranges 443 --access Allow --protocol Tcp  
