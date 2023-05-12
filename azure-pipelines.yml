@@ -29,10 +29,10 @@ jobs:
               --size Standard_D2s_v3 \
               --admin-username syncfusion \
               --admin-password Syncfusion@123 \
-              --nsg-name newip \
               --nsg-rule SSH \
               --nsg-rule RDP \
               --public-ip-address-allocation static
+            az network nsg create --resource-group azurepipeline --name newip
             # Open port 80
             az network nsg rule create --resource-group azurepipeline --nsg-name newip --name AllowHTTP --priority 100 --destination-port-ranges 80 --access Allow --protocol Tcp
       
