@@ -32,8 +32,4 @@ jobs:
               --nsg-rule SSH \
               --nsg-rule RDP \
               --public-ip-address-allocation static \
-              --license-type Windows_Server \
-            az vm image terms accept \
-              --publisher syncfusion \
-              --offer bold-bi-enterprise-multi-tenant \
-              --plan -bring-your-own-license 
+              --license-type Windows_Server
