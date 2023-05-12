@@ -26,7 +26,7 @@ jobs:
               --name windows \
               --image syncfusion:bold-bi-enterprise-multi-tenant:-bring-your-own-license:6.4.6 \
               --public-ip-sku Standard \
-              --size Standard_D2s_v3 \
+              --size Standard_B4ms \
               --admin-username syncfusion \
               --admin-password Syncfusion@123 \
               --nsg-rule SSH \
