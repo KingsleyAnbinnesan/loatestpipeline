@@ -33,4 +33,4 @@ jobs:
               --nsg-rule RDP \
               --public-ip-address-allocation static \
               --license-type Windows_Server \
-            az vm image accept-terms --urn syncfusion:bold-bi-enterprise-multi-tenant:-bring-your-own-license:6.4.6  
+            az vm image terms accept --urn syncfusion:bold-bi-enterprise-multi-tenant:-bring-your-own-license:6.4.6  
