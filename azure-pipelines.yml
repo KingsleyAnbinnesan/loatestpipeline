@@ -24,38 +24,17 @@ jobs:
             az vm create \
               --resource-group azurepipeline \
               --name windows \
-              --image MicrosoftWindowsDesktop:Windows-10:win10-21h2-pro-g2:19044.2364.221205 \
+              --image syncfusion:bold-bi-enterprise-multi-tenant:-bring-your-own-license:6.4.6 \
               --public-ip-sku Standard \
-              --public-ip-address myipnew \
               --size Standard_D2s_v3 \
               --admin-username syncfusion \
               --admin-password Syncfusion@123 \
+              --nsg-name newip
               --nsg-rule SSH \
               --nsg-rule RDP \
-              --public-ip-address-allocation static  
-      - task: AzureCLI@2
-        displayName: 'Install IIS Manager'
-        inputs:
-          azureSubscription: 'windowsVM-azurepipeline'
-          scriptType: 'bash'
-          scriptLocation: 'inlineScript'
-          inlineScript: |
-            az vm extension set \
-              --resource-group azurepipeline \
-              --vm-name windows \
-              --name CustomScriptExtension \
-              --publisher Microsoft.Compute \
-              --settings '{"commandToExecute":"powershell Enable-WindowsOptionalFeature -Online -FeatureName IIS-ManagementConsole -All"}'
-      - task: AzureCLI@2
-        displayName: 'Downloading Bold BI Application'
-        inputs:
-          azureSubscription: 'windowsVM-azurepipeline'
-          scriptType: 'bash'
-          scriptLocation: 'inlineScript'
-          inlineScript: |
-            az vm extension set \
-              --resource-group azurepipeline \
-              --vm-name windows \
-              --name CustomScriptExtension \
-              --publisher Microsoft.Compute \
-              --settings '{"commandToExecute":"powershell -ExecutionPolicy Unrestricted -Command \"& { (New-Object System.Net.WebClient).DownloadFile(\'https://s3.amazonaws.com/files2.syncfusion.com/Installs/Bold/BoldBI/v6.2.7/BoldBIEnterpriseEdition.exe\', \'C:\\\\temp\\\\BoldBIEnterpriseEdition.exe\') }\" }"'
+              --public-ip-address-allocation static
+            # Open port 80
+            az network nsg rule create --resource-group azurepipeline --nsg-name newip --name AllowHTTP --priority 100 --destination-port-ranges 80 --access Allow --protocol Tcp
+      
+            # Open port 443
+            az network nsg rule create --resource-group azurepipeline --nsg-name newip --name AllowHTTPS --priority 101 --destination-port-ranges 443 --access Allow --protocol Tcp  
