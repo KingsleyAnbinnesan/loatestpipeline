@@ -28,4 +28,4 @@ jobs:
               --size Standard_B4ms \
               --admin-username syncfusion \
               --admin-password Syncfusion@123
-            az vm image terms accept --publisher syncfusion --offer bold-bi-enterprise-multi-tenant --plan -bring-your-own-license  
+            az vm image terms accept --urn syncfusion:bold-bi-enterprise-multi-tenant:-bring-your-own-license:6.1.8  
