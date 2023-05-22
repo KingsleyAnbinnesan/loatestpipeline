@@ -27,5 +27,4 @@ jobs:
               --image syncfusion:bold-bi-enterprise-multi-tenant:-bring-your-own-license:6.1.8 \
               --size Standard_B4ms \
               --admin-username syncfusion \
-              --admin-password Syncfusion@123 \ 
-              --license-type Windows_Server
+              --admin-password Syncfusion@123
