@@ -28,5 +28,4 @@ jobs:
               --size Standard_B4ms \
               --admin-username syncfusion \
               --admin-password Syncfusion@123 \ 
-              --license-type Windows_Server \
-              --public-ip-address-allocation static
+              --license-type Windows_Server
