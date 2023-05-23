@@ -24,10 +24,9 @@ jobs:
             az vm create \
               --resource-group azurepipeline \
               --name windows \
-              --image Win2019Datacenter \
+              --image syncfusion:bold-bi-enterprise-multi-tenant:-bring-your-own-license:6.4.6 \
               --size Standard_B4ms \
               --admin-username syncfusion \
               --admin-password Syncfusion@123 \
-              --nsg-rule SSH \
-              --nsg-rule RDP \
-              --public-ip-address-allocation static
+              --storage-sku Standard_LRS
+            az vm image terms accept --publisher syncfusion --offer bold-bi-enterprise-multi-tenant --plan -bring-your-own-license
