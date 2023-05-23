@@ -15,6 +15,15 @@ jobs:
     steps:
       - checkout: self
       - task: AzureCLI@2
+        displayName: 'Accept Azure Marketplace Terms'
+        inputs:
+          azureSubscription: 'windowsVM-azurepipeline'
+          scriptType: 'bash'
+          scriptLocation: 'inlineScript'
+          inlineScript: |
+            az vm image terms accept --publisher syncfusion --offer bold-bi-enterprise-multi-tenant --plan -bring-your-own-license
+
+      - task: AzureCLI@2
         displayName: 'Create Azure VM'
         inputs:  
           azureSubscription: 'windowsVM-azurepipeline'
@@ -30,4 +39,3 @@ jobs:
               --admin-username syncfusion \
               --admin-password Syncfusion@123 \
               --storage-sku Standard_LRS
-            az vm image terms accept --urn syncfusion:bold-bi-enterprise-multi-tenant:-bring-your-own-license:6.4.6
