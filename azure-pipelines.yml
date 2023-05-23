@@ -24,9 +24,10 @@ jobs:
             az vm create \
               --resource-group azurepipeline \
               --name windows \
+              --public-ip-sku Standard \
               --image syncfusion:bold-bi-enterprise-multi-tenant:-bring-your-own-license:6.4.6 \
               --size Standard_B4ms \
               --admin-username syncfusion \
               --admin-password Syncfusion@123 \
               --storage-sku Standard_LRS
-            az vm image terms accept --publisher syncfusion --offer bold-bi-enterprise-multi-tenant --plan -bring-your-own-license
+            az vm image terms accept --urn syncfusion:bold-bi-enterprise-multi-tenant:-bring-your-own-license:6.4.6
