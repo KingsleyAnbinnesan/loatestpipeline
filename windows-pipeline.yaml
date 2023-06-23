@@ -1,1 +1,34 @@
-i
+trigger:
+  - main
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+steps:
+- task: AzureCLI@2
+  inputs:
+    azureSubscription: 'winloadsnapshot'
+    scriptType: 'bash'
+    scriptLocation: 'inlineScript'
+    inlineScript: |
+      # Set variables
+      resourceGroupName='pipeline-win'
+      vmName='newloadtestwin'
+      diskId='/subscriptions/43ab43f3-706d-4979-82e0-86025f9ece10/resourceGroups/pipeline-win/providers/Microsoft.Compute/disks/new'
+      location='eastus'
+      virtualNetworkName='winpipe-vnet'
+      subnetName='default'
+      adminUsername='syncfusion'
+      adminPassword='Syncfusion@123'
+
+      # Create VM from managed disk
+      az vm create \
+        --resource-group $resourceGroupName \
+        --name $vmName \
+        --attach-data-disks $diskId \
+        --location $location \
+        --vnet-name $virtualNetworkName \
+        --subnet $subnetName \
+        --admin-username $adminUsername \
+        --admin-password $adminPassword
+
