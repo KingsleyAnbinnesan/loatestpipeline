@@ -25,7 +25,7 @@ steps:
       az vm create \
         --resource-group $resourceGroupName \
         --name $vmName \
-        --attach-data-disks $diskId \
+        --attach-os-disk $diskId \
         --location $location \
         --vnet-name $virtualNetworkName \
         --subnet $subnetName \
