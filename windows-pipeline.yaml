@@ -30,8 +30,7 @@ steps:
         --source $snapshotId \
         --location $location \
         --sku $diskSku \
-        --size-gb $diskSizeGB \
-        --storage-account-type StandardSSD_LRS
+        --size-gb $diskSizeGB
 
       # Create Windows VM using managed disk
       az vm create \
