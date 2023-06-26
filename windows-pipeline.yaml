@@ -13,8 +13,8 @@ steps:
     inlineScript: |
       # Set variables
       resourceGroupName='pipeline-win'
-      vmName='newwinloadtest'
-      diskId='/subscriptions/43ab43f3-706d-4979-82e0-86025f9ece10/resourceGroups/pipeline-win/providers/Microsoft.Compute/disks/newwinloadtest'
+      vmName='new'
+      diskId='/subscriptions/43ab43f3-706d-4979-82e0-86025f9ece10/resourceGroups/pipeline-win/providers/Microsoft.Compute/disks/new'
       osType='Windows'
       location='eastus'
       virtualNetworkName='winpipe-vnet'
