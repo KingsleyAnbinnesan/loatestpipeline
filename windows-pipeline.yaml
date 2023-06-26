@@ -22,6 +22,7 @@ steps:
       virtualNetworkName='winpipe-vnet'
       subnetName='default'
       vmSize='Standard_B4ms'
+      publicIpName='newwinloadtest'
 
       # Create managed disk from snapshot
       az disk create \
@@ -31,6 +32,13 @@ steps:
         --location $location \
         --sku $diskSku \
         --size-gb $diskSizeGB
+
+      # Create public IP address with Standard SKU
+      az network public-ip create \
+        --resource-group $resourceGroupName \
+        --name $publicIpName \
+        --location $location \
+        --sku Standard  
 
       # Create Windows VM using managed disk
       az vm create \
