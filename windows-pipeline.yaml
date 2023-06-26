@@ -13,11 +13,12 @@ steps:
     inlineScript: |
       # Set variables
       resourceGroupName='pipeline-win'
-      diskName='newwindisk'
+      diskName='newwinloadtest'
       snapshotId='/subscriptions/43ab43f3-706d-4979-82e0-86025f9ece10/resourceGroups/pipeline-win/providers/Microsoft.Compute/snapshots/newwinsnapshotload'
       location='eastus'
-      diskSku='Standard_LRS'
-      vmName='newloadtestwin'
+      diskSku='StandardSSD_LRS'
+      diskSizeGB=127
+      vmName='newwinloadtest'
       virtualNetworkName='winpipe-vnet'
       subnetName='default'
       vmSize='Standard_B4ms'
@@ -28,7 +29,9 @@ steps:
         --name $diskName \
         --source $snapshotId \
         --location $location \
-        --sku $diskSku
+        --sku $diskSku \
+        --size-gb $diskSizeGB \
+        --storage-account-type StandardSSD_LRS
 
       # Create Windows VM using managed disk
       az vm create \
@@ -39,4 +42,4 @@ steps:
         --location $location \
         --vnet-name $virtualNetworkName \
         --subnet $subnetName \
-        --size $vmSize
+        --size $vmSize 
