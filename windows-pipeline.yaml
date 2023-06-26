@@ -54,4 +54,5 @@ steps:
         --subnet $subnetName \
         --public-ip-address $publicIpName \
         --public-ip-address-allocation static \
-        --size $vmSize
+        --size $vmSize \
+        --zone $availabilityZone
