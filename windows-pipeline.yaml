@@ -11,21 +11,19 @@ steps:
     scriptType: 'bash'
     scriptLocation: 'inlineScript'
     inlineScript: |
-      # Set variables
+      # Set variables
+      subscriptionId ='43ab43f3-706d-4979-82e0-86025f9ece10'
       resourceGroupName='pipeline-win'
-      vmName='new'
-      diskId='/subscriptions/43ab43f3-706d-4979-82e0-86025f9ece10/resourceGroups/pipeline-win/providers/Microsoft.Compute/disks/new'
-      osType='Windows'
-      location='eastus'
-      virtualNetworkName='winpipe-vnet'
-      subnetName='default'
-
-      # Create VM from managed disk
-      az vm create \
+      snapshotName ='newwinsnapshotload'
+      diskName='new'
+      diskSize = '127'
+      storageType = 'StandardSSD_LRS'
+      zone='1'
+      az account set --subscription $subscriptionId
+      snapshotId=$(az snapshot show --name $snapshotName --resource-group $resourceGroupName --query [id] -o tsv)
+      az disk create 
         --resource-group $resourceGroupName \
-        --name $vmName \
-        --attach-os-disk $diskId \
-        --os-type $osType \
-        --location $location \
-        --vnet-name $virtualNetworkName \
-        --subnet $subnetName 
+        --name $diskName \
+        --sku $storageType \
+        --size-gb $diskSize \
+        --source $snapshotId
