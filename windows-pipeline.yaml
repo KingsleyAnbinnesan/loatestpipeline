@@ -18,6 +18,7 @@ steps:
       location='eastus'
       diskSku='StandardSSD_LRS'
       diskSizeGB=127
+      availabilityZone='1'
       vmName='newwinloadtest'
       virtualNetworkName='winpipe-vnet'
       subnetName='default'
@@ -31,7 +32,8 @@ steps:
         --source $snapshotId \
         --location $location \
         --sku $diskSku \
-        --size-gb $diskSizeGB 
+        --size-gb $diskSizeGB \
+        --zone $availabilityZone
         
       # Create public IP address with Standard SKU
       az network public-ip create \
