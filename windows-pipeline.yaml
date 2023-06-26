@@ -38,7 +38,8 @@ steps:
         --resource-group $resourceGroupName \
         --name $publicIpName \
         --location $location \
-        --sku Standard   
+        --sku Standard \
+        --allocation-method Static   
 
       # Create Windows VM using managed disk
       az vm create \
@@ -50,4 +51,5 @@ steps:
         --vnet-name $virtualNetworkName \
         --subnet $subnetName \
         --public-ip-address $publicIpName \
-        --size $vmSize 
+        --public-ip-address-allocation static \
+        --size $vmSize
