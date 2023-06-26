@@ -11,19 +11,26 @@ steps:
     scriptType: 'bash'
     scriptLocation: 'inlineScript'
     inlineScript: |
-      # Set variables
-      subscriptionId ='43ab43f3-706d-4979-82e0-86025f9ece10'
+      # Set variables
+      subscriptionId='43ab43f3-706d-4979-82e0-86025f9ece10'
       resourceGroupName='pipeline-win'
-      snapshotName ='newwinsnapshotload'
+      snapshotName='newwinsnapshotload'
       diskName='new'
-      diskSize = '127'
-      storageType = 'StandardSSD_LRS'
+      diskSize='127'
+      storageType='StandardSSD_LRS'
       zone='1'
+
+      # Set the active subscription
       az account set --subscription $subscriptionId
-      snapshotId=$(az snapshot show --name $snapshotName --resource-group $resourceGroupName --query [id] -o tsv)
-      az disk create 
+
+      # Get the snapshot ID
+      snapshotId=$(az snapshot show --name $snapshotName --resource-group $resourceGroupName --query id --output tsv)
+
+      # Create the managed disk from the snapshot
+      az disk create \
         --resource-group $resourceGroupName \
         --name $diskName \
         --sku $storageType \
         --size-gb $diskSize \
-        --source $snapshotId
+        --source $snapshotId \
+        --zone $zone
