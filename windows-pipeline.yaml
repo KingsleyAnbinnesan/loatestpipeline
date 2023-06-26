@@ -14,16 +14,9 @@ steps:
       # Set variables
       resourceGroupName='pipeline-win'
       diskName='newwinloadtest'
-      snapshotId='/subscriptions/43ab43f3-706d-4979-82e0-86025f9ece10/resourceGroups/pipeline-win/providers/Microsoft.Compute/snapshots/newwinsnapshotload'
+      snapshotId='/subscriptions/your-subscription-id/resourceGroups/pipeline-win/providers/Microsoft.Compute/snapshots/newwinsnapshotload'
       location='eastus'
-      diskSku='StandardSSD_LRS'
-      diskSizeGB=127
-      availabilityZone='1'
-      vmName='newwinloadtest'
-      virtualNetworkName='winpipe-vnet'
-      subnetName='default'
-      vmSize='Standard_B4ms'
-      publicIpName='newwinloadtest'
+      diskSku='Standard_LRS'
 
       # Create managed disk from snapshot
       az disk create \
@@ -31,28 +24,4 @@ steps:
         --name $diskName \
         --source $snapshotId \
         --location $location \
-        --sku $diskSku \
-        --size-gb $diskSizeGB \
-        --zone $availabilityZone
-        
-      # Create public IP address with Standard SKU
-      az network public-ip create \
-        --resource-group $resourceGroupName \
-        --name $publicIpName \
-        --location $location \
-        --sku Standard \
-        --allocation-method Static   
-
-      # Create Windows VM using managed disk
-      az vm create \
-        --resource-group $resourceGroupName \
-        --name $vmName \
-        --attach-os-disk "/subscriptions/43ab43f3-706d-4979-82e0-86025f9ece10/resourceGroups/pipeline-win/providers/Microsoft.Compute/disks/$diskName" \
-        --os-type windows \
-        --location $location \
-        --vnet-name $virtualNetworkName \
-        --subnet $subnetName \
-        --public-ip-address $publicIpName \
-        --public-ip-address-allocation static \
-        --size $vmSize \
-        --zone $availabilityZone
+        --sku $diskSku
