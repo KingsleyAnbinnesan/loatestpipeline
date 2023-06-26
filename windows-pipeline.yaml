@@ -14,7 +14,7 @@ steps:
       # Set variables
       resourceGroupName='pipeline-win'
       diskName='newwinloadtest'
-      snapshotId='/subscriptions/your-subscription-id/resourceGroups/pipeline-win/providers/Microsoft.Compute/snapshots/newwinsnapshotload'
+      snapshotId='/subscriptions/43ab43f3-706d-4979-82e0-86025f9ece10/resourceGroups/pipeline-win/providers/Microsoft.Compute/snapshots/newwinsnapshotload'
       location='eastus'
       diskSku='Standard_LRS'
 
