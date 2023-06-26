@@ -13,20 +13,30 @@ steps:
     inlineScript: |
       # Set variables
       resourceGroupName='pipeline-win'
-      vmName='newloadtestwin'
-      diskId='/subscriptions/43ab43f3-706d-4979-82e0-86025f9ece10/resourceGroups/pipeline-win/providers/Microsoft.Compute/disks/new'
-      osType='Windows'
+      diskName='newwindisk'
+      snapshotId='/subscriptions/43ab43f3-706d-4979-82e0-86025f9ece10/resourceGroups/pipeline-win/providers/Microsoft.Compute/snapshots/newwinsnapshotload'
       location='eastus'
+      diskSku='Standard_LRS'
+      vmName='newloadtestwin'
       virtualNetworkName='winpipe-vnet'
       subnetName='default'
+      vmSize='Standard_B4ms'
 
-      # Create VM from managed disk
+      # Create managed disk from snapshot
+      az disk create \
+        --resource-group $resourceGroupName \
+        --name $diskName \
+        --source $snapshotId \
+        --location $location \
+        --sku $diskSku
+
+      # Create Windows VM using managed disk
       az vm create \
         --resource-group $resourceGroupName \
         --name $vmName \
-        --attach-os-disk $diskId \
-        --os-type $osType \
+        --attach-os-disk "/subscriptions/43ab43f3-706d-4979-82e0-86025f9ece10/resourceGroups/pipeline-win/providers/Microsoft.Compute/disks/$diskName" \
+        --os-type windows \
         --location $location \
         --vnet-name $virtualNetworkName \
-        --subnet $subnetName 
-
+        --subnet $subnetName \
+        --size $vmSize
