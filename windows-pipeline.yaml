@@ -31,14 +31,14 @@ steps:
         --source $snapshotId \
         --location $location \
         --sku $diskSku \
-        --size-gb $diskSizeGB
-
+        --size-gb $diskSizeGB 
+        
       # Create public IP address with Standard SKU
       az network public-ip create \
         --resource-group $resourceGroupName \
         --name $publicIpName \
         --location $location \
-        --sku Standard  
+        --sku Standard   
 
       # Create Windows VM using managed disk
       az vm create \
@@ -49,4 +49,5 @@ steps:
         --location $location \
         --vnet-name $virtualNetworkName \
         --subnet $subnetName \
+        --public-ip-address $publicIpName \
         --size $vmSize 
