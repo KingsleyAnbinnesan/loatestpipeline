@@ -46,6 +46,4 @@ steps:
         --subnet $subnetName \
         --size $vmSize \
         --zone $availabilityZone \
-        --storage-controller-type SCSI \
-        --sku Standard \
         --license-type Windows_Client
