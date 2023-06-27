@@ -13,19 +13,39 @@ steps:
     inlineScript: |
       # Set variables
       resourceGroupName='pipeline-win'
-      vmName='new'
-      diskId='/subscriptions/43ab43f3-706d-4979-82e0-86025f9ece10/resourceGroups/pipeline-win/providers/Microsoft.Compute/disks/new'
-      osType='Windows'
+      diskName='new'
+      snapshotId='/subscriptions/43ab43f3-706d-4979-82e0-86025f9ece10/resourceGroups/pipeline-win/providers/Microsoft.Compute/snapshots/newwinsnapshotload'
       location='eastus'
+      diskSku='StandardSSD_LRS'
+      diskSizeGB=127
+      availabilityZone='1'
+      vmName='new'
       virtualNetworkName='winpipe-vnet'
       subnetName='default'
+      vmSize='Standard_B4ms'
 
-      # Create VM from managed disk
+      # Create managed disk from snapshot with availability zone
+      az disk create \
+        --resource-group $resourceGroupName \
+        --name $diskName \
+        --source $snapshotId \
+        --location $location \
+        --sku $diskSku \
+        --size-gb $diskSizeGB \
+        --zone $availabilityZone \
+        --hyper-v-generation V2
+
+      # Create Windows VM using managed disk and public IP address with availability zone
       az vm create \
         --resource-group $resourceGroupName \
         --name $vmName \
-        --attach-os-disk $diskId \
-        --os-type $osType \
+        --attach-os-disk "/subscriptions/43ab43f3-706d-4979-82e0-86025f9ece10/resourceGroups/pipeline-win/providers/Microsoft.Compute/disks/$diskName" \
+        --os-type windows \
         --location $location \
         --vnet-name $virtualNetworkName \
-        --subnet $subnetName
+        --subnet $subnetName \
+        --size $vmSize \
+        --zone $availabilityZone \
+        --storage-controller-type SCSI \
+        --sku Standard \
+        --license-type Windows_Client
