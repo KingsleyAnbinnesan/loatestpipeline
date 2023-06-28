@@ -48,23 +48,17 @@ steps:
         --zone $availabilityZone \
         --license-type Windows_Client
 
-- task: PowerShell@2
+- task: AzureCLI@2
+  displayName: 'Connect to VM and Start Application'
   inputs:
-    targetType: 'inline'
-    script: |
-      # Set variables
-      $resourceGroupName = 'pipeline-win'
-      $vmName = 'new1'
-      $username = 'syncfusion'
-      $password = 'Syncfusion@123'
-      $applicationPath = 'C:\Program Files (x86)\Bold BI Enterprise Edition\Utilities\DeployIIS\DeployIISConsole.exe'
-
-      # Construct the WinRM command to start the application
-      $winrmCommand = "Invoke-Command -ComputerName $vmName -ScriptBlock {Start-Process -FilePath '$applicationPath' -WindowStyle Hidden}"
-
-      # Enable WinRM on the VM
-      Set-Item WSMan:\localhost\Service\AllowUnencrypted -Value True
-
-      # Execute the WinRM command to start the application
-      Invoke-Command -ComputerName $vmName -ScriptBlock $winrmCommand -Credential (New-Object System.Management.Automation.PSCredential($username, (ConvertTo-SecureString -String $password -AsPlainText -Force)))
-
+    azureSubscription: 'windowsVM-azurepipeline'
+    scriptType: 'bash'
+    scriptLocation: 'inlineScript'
+    inlineScript: |
+      az vm run-command invoke \
+        --resource-group $resourceGroupName \
+        --name $vmName \
+        --command-id RunPowerShellScript \
+        --scripts '
+          Start-Sleep -Seconds 300
+          Start-Process -FilePath "C:\Program Files (x86)\Bold BI Enterprise Edition\Utilities\DeployIIS\DeployIISConsole.exe"'
