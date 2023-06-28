@@ -48,12 +48,19 @@ steps:
         --zone $availabilityZone \
         --license-type Windows_Client
 
+- task: UsePythonVersion@0
+  inputs:
+    versionSpec: '3.x'
+    addToPath: true
 
 - task: AzurePowerShell@5
   inputs:
     azureSubscription: 'winloadsnapshot'
     ScriptType: 'InlineScript'
     Inline: |
+      # Install the latest Azure PowerShell module
+      Install-Module -Name Az -AllowClobber -Force
+
       # Set variables
       $resourceGroupName = 'pipeline-win'
       $vmName = 'new1'
@@ -74,5 +81,3 @@ steps:
       Invoke-Command -Session $session -ScriptBlock {
         Start-Process -FilePath $using:applicationPath
       }
-      
-      FailOnStderr: true
