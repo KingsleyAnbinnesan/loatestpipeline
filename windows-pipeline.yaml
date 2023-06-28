@@ -61,6 +61,5 @@ steps:
         --command-id RunPowerShellScript \
         --scripts '
           Start-Sleep -Seconds 300
-          Set-Location -Path "C:\Program Files (x86)\Bold BI Enterprise Edition\Utilities\DeployIIS"
-          Start-Process -FilePath "DeployIISConsole.exe"
+          Start-Process -FilePath "C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe" -ArgumentList "http://localhost"
         '
