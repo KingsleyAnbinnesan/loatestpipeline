@@ -13,13 +13,13 @@ steps:
     inlineScript: |
       # Set variables
       resourceGroupName='pipeline-win'
-      diskName='new'
+      diskName='new1'
       snapshotId='/subscriptions/43ab43f3-706d-4979-82e0-86025f9ece10/resourceGroups/pipeline-win/providers/Microsoft.Compute/snapshots/newwinsnapshotload'
       location='eastus'
       diskSku='StandardSSD_LRS'
       diskSizeGB=127
       availabilityZone='1'
-      vmName='new'
+      vmName='new1'
       virtualNetworkName='winpipe-vnet'
       subnetName='default'
       vmSize='Standard_B4ms'
@@ -48,22 +48,24 @@ steps:
         --zone $availabilityZone \
         --license-type Windows_Client
 
-      # Get the public IP address of the VM
-      publicIpAddress=$(az vm show -g $resourceGroupName -n $vmName --query publicIps -o tsv)
+- task: AzureCLI@2
+  inputs:
+    azureSubscription: 'winloadsnapshot'
+    scriptType: 'bash'
+    scriptLocation: 'inlineScript'
+    inlineScript: |
+      # Set variables
+      resourceGroupName='pipeline-win'
+      vmName='new1'
+      vmExtensionName='customScript'
+      vmExtensionScriptLocation='http://localhost'
+      vmExtensionScriptArguments='"C:\\Program Files (x86)\\Bold BI Enterprise Edition\\Utilities\\DeployIIS\\DeployIISConsole.exe"'
 
-      # Connect to the VM using Remote Desktop Protocol (RDP) and run the application
-      rdpScript=$(cat <<EOF
-Add-Type -Path 'C:\Program Files\Microsoft\OnlineManagement\Common\AzureRM\AzureRM.Compute\Connect-AzureRm.ps1'
-$creds = Get-Credential
-$rdpFile = [IO.Path]::Combine([IO.Path]::GetTempPath(), "$vmName.rdp")
-Get-AzureRmRemoteDesktopFile -ResourceGroupName $resourceGroupName -Name $vmName -LocalPath $rdpFile -Credential $creds
-Start-Process -FilePath "$rdpFile"
-Start-Sleep -Seconds 600
-$session = Get-RDMSession -ConnectionBroker 'localhost' -Role RDP-Tcp
-Invoke-RDMSession -SessionId $session.Id -Command 'C:\Program Files (x86)\Bold BI Enterprise Edition\Utilities\DeployIIS\DeployIISConsole.exe'
-EOF
-      )
-
-      # Execute the RDP and application script on the local machine
-      echo "$rdpScript" > start-app.ps1
-      az vm run-command invoke -g $resourceGroupName -n $vmName --command-id RunPowerShellScript --scripts @start-app.ps1
+      # Install Custom Script Extension on the VM
+      az vm extension set \
+        --resource-group $resourceGroupName \
+        --vm-name $vmName \
+        --name $vmExtensionName \
+        --publisher Microsoft.Azure.Extensions \
+        --version 2.1 \
+        --protected-settings "{\"commandToExecute\": \"powershell.exe -ExecutionPolicy Unrestricted -File $vmExtensionScriptArguments\"}"
