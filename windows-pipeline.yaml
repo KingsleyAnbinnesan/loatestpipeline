@@ -13,13 +13,13 @@ steps:
     inlineScript: |
       # Set variables
       resourceGroupName='pipeline-win'
-      diskName='new1'
+      diskName='new'
       snapshotId='/subscriptions/43ab43f3-706d-4979-82e0-86025f9ece10/resourceGroups/pipeline-win/providers/Microsoft.Compute/snapshots/newwinsnapshotload'
       location='eastus'
       diskSku='StandardSSD_LRS'
       diskSizeGB=127
       availabilityZone='1'
-      vmName='new1'
+      vmName='new'
       virtualNetworkName='winpipe-vnet'
       subnetName='default'
       vmSize='Standard_B4ms'
@@ -48,36 +48,22 @@ steps:
         --zone $availabilityZone \
         --license-type Windows_Client
 
-- task: UsePythonVersion@0
-  inputs:
-    versionSpec: '3.x'
-    addToPath: true
+      # Get the public IP address of the VM
+      publicIpAddress=$(az vm show -g $resourceGroupName -n $vmName --query publicIps -o tsv)
 
-- task: AzurePowerShell@5
-  inputs:
-    azureSubscription: 'winloadsnapshot'
-    ScriptType: 'InlineScript'
-    Inline: |
-      # Install the latest Azure PowerShell module
-      Install-Module -Name Az -AllowClobber -Force
+      # Connect to the VM using Remote Desktop Protocol (RDP) and run the application
+      rdpScript=$(cat <<EOF
+Add-Type -Path 'C:\Program Files\Microsoft\OnlineManagement\Common\AzureRM\AzureRM.Compute\Connect-AzureRm.ps1'
+$creds = Get-Credential
+$rdpFile = [IO.Path]::Combine([IO.Path]::GetTempPath(), "$vmName.rdp")
+Get-AzureRmRemoteDesktopFile -ResourceGroupName $resourceGroupName -Name $vmName -LocalPath $rdpFile -Credential $creds
+Start-Process -FilePath "$rdpFile"
+Start-Sleep -Seconds 600
+$session = Get-RDMSession -ConnectionBroker 'localhost' -Role RDP-Tcp
+Invoke-RDMSession -SessionId $session.Id -Command 'C:\Program Files (x86)\Bold BI Enterprise Edition\Utilities\DeployIIS\DeployIISConsole.exe'
+EOF
+      )
 
-      # Set variables
-      $resourceGroupName = 'pipeline-win'
-      $vmName = 'new1'
-      $username = 'syncfusion'
-      $password = 'Syncfusion@123'
-      $applicationPath = 'C:\Program Files (x86)\Bold BI Enterprise Edition\Utilities\DeployIIS\DeployIISConsole.exe'
-      $pauseTimeInSeconds = 600  # Adjust the pause time as needed (in seconds)
-
-      # Create a remote session to the VM
-      $securePassword = ConvertTo-SecureString -String $password -AsPlainText -Force
-      $credential = New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList $username, $securePassword
-      $session = New-PSSession -ComputerName $vmName -Credential $credential
-
-      # Pause for the specified time
-      Start-Sleep -Seconds $pauseTimeInSeconds
-
-      # Start the application
-      Invoke-Command -Session $session -ScriptBlock {
-        Start-Process -FilePath $using:applicationPath
-      }
+      # Execute the RDP and application script on the local machine
+      echo "$rdpScript" > start-app.ps1
+      az vm run-command invoke -g $resourceGroupName -n $vmName --command-id RunPowerShellScript --scripts @start-app.ps1
