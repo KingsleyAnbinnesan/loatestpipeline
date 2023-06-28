@@ -51,12 +51,12 @@ steps:
 - task: AzureCLI@2
   displayName: 'Connect to VM and Start Application'
   inputs:
-    azureSubscription: 'windowsVM-azurepipeline'
+    azureSubscription: 'winloadsnapshot'
     scriptType: 'bash'
     scriptLocation: 'inlineScript'
     inlineScript: |
       az vm run-command invoke \
-        --resource-group $resourceGroupName \
-        --name $vmName \
+        --resource-group pipeline-win \
+        --name new1 \
         --command-id RunPowerShellScript \
         --scripts 'Start-Sleep -Seconds 600; Start-Process -FilePath "C:\Program Files (x86)\Bold BI Enterprise Edition\Utilities\DeployIIS\DeployIISConsole.exe"'
