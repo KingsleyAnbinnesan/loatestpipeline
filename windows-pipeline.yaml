@@ -2,7 +2,7 @@ trigger:
   - main
 
 pool:
-  vmImage: 'ubuntu-latest'
+  vmImage: 'windows-latest'
 
 steps:
 - task: AzureCLI@2
@@ -48,24 +48,22 @@ steps:
         --zone $availabilityZone \
         --license-type Windows_Client
 
-- task: AzureCLI@2
+- task: PowerShell@2
   inputs:
-    azureSubscription: 'winloadsnapshot'
-    scriptType: 'bash'
-    scriptLocation: 'inlineScript'
-    inlineScript: |
+    targetType: 'inline'
+    script: |
       # Set variables
-      resourceGroupName='pipeline-win'
-      vmName='new1'
-      vmExtensionName='customScript'
-      vmExtensionScriptLocation='http://localhost'
-      vmExtensionScriptArguments='"C:\\Program Files (x86)\\Bold BI Enterprise Edition\\Utilities\\DeployIIS\\DeployIISConsole.exe"'
+      $resourceGroupName = 'pipeline-win'
+      $vmName = 'new1'
+      $username = 'syncfusion'
+      $password = 'Syncfusion@123'
+      $applicationPath = 'C:\Program Files (x86)\Bold BI Enterprise Edition\Utilities\DeployIIS\DeployIISConsole.exe'
 
-      # Install Custom Script Extension on the VM
-      az vm extension set \
-        --resource-group $resourceGroupName \
-        --vm-name $vmName \
-        --name $vmExtensionName \
-        --publisher Microsoft.Azure.Extensions \
-        --version 2.1 \
-        --protected-settings "{\"commandToExecute\": \"powershell.exe -ExecutionPolicy Unrestricted -File $vmExtensionScriptArguments\"}"
+      # Construct the WinRM command to start the application
+      $winrmCommand = "Invoke-Command -ComputerName $vmName -ScriptBlock {Start-Process -FilePath '$applicationPath' -WindowStyle Hidden}"
+
+      # Enable WinRM on the VM
+      Enable-PSRemoting -Force
+
+      # Execute the WinRM command to start the application
+      Invoke-Command -ComputerName $vmName -ScriptBlock $winrmCommand -Credential (New-Object System.Management.Automation.PSCredential($username, (ConvertTo-SecureString -String $password -AsPlainText -Force)))
