@@ -62,4 +62,17 @@ steps:
         --scripts '
           Start-Sleep -Seconds 300
           Start-Process -FilePath "C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe" -ArgumentList "http://localhost"
+          Start-Sleep -Seconds 20
+          $driverPath = "C:\WebDriver\msedgedriver.exe"
+          $env:PATH += ";$driverPath"
+          Add-Type -Path "C:\WebDriver\WebDriver.dll"
+          $driver = [OpenQA.Selenium.Edge.EdgeDriver]::new($driverPath)
+          $driver.Url = "http://localhost"
+          Start-Sleep -Seconds 15
+          $usernameInput = $driver.FindElementById("username")
+          $passwordInput = $driver.FindElementById("password")
+          $loginButton = $driver.FindElementById("login-button")
+          $usernameInput.SendKeys("Admin")
+          $passwordInput.SendKeys("Admin@123")
+          $loginButton.Click()
         '
