@@ -59,4 +59,8 @@ steps:
         --resource-group pipeline-win \
         --name new1 \
         --command-id RunPowerShellScript \
-        --scripts 'Start-Sleep -Seconds 600; Start-Process -FilePath "C:\Program Files (x86)\Bold BI Enterprise Edition\Utilities\DeployIIS\DeployIISConsole.exe"'
+        --scripts '
+          Start-Sleep -Seconds 300
+          Set-Location -Path "C:\Program Files (x86)\Bold BI Enterprise Edition\Utilities\DeployIIS"
+          Start-Process -FilePath "DeployIISConsole.exe"
+        '
