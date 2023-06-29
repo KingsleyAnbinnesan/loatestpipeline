@@ -49,7 +49,7 @@ steps:
         --license-type Windows_Client
 
 - task: AzureCLI@2
-  displayName: 'Connect to VM and Start Application'
+  displayName: 'Running Load Test'
   inputs:
     azureSubscription: 'winloadsnapshot'
     scriptType: 'bash'
@@ -63,5 +63,7 @@ steps:
           Start-Sleep -Seconds 500
           cd C:\\Users\\syncfusion\\Downloads\\apache-jmeter-5.5\\apache-jmeter-5.5\\bin
           Start-Sleep -Seconds 10
-          .\\jmeter -n -t loadtest.jmx -l result.csv -e -o result'
+          .\\jmeter -n -t loadtest.jmx -l result.csv -e -o result
+          Start-Sleep -Seconds 900
+          .\\jmeter -n -t loadtest.jmx -l result1.csv -e -o resultfor50users'
       
