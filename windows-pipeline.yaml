@@ -48,27 +48,15 @@ steps:
         --zone $availabilityZone \
         --license-type Windows_Client
 
-- task: AzureCLI@2
-  displayName: 'Running Load Test'
-  inputs:
-    azureSubscription: 'winloadsnapshot'
-    scriptType: 'bash'
-    scriptLocation: 'inlineScript'
-    inlineScript: |
+      # Running the Load Test  
       az vm run-command invoke \
-        --resource-group pipeline-win \
-        --name new1 \
+        --resource-group $resourceGroupName \
+        --name $vmName \
         --command-id RunPowerShellScript \
         --scripts '
           Start-Sleep -Seconds 300
           cd C:\\Users\\syncfusion\\Downloads\\apache-jmeter-5.5\\apache-jmeter-5.5\\bin
           Start-Sleep -Seconds 10
           .\\jmeter -n -t loadtest123.jmx -l result.csv -e -o result
-          Start-Sleep -Seconds 300
-          .\\jmeter -n -t loadtest.jmx -l result1.csv -e -o resultfor50users
-          Start-Sleep -Seconds 300
-          .\\jmeter -n -t loadtest.jmx -l result2.csv -e -o resultfor50users1
-          Start-Sleep -Seconds 300
-          .\\jmeter -n -t loadtest.jmx -l result3.csv -e -o resultfor50users2
-          Start-Sleep -Seconds 300
-          .\\jmeter -n -t loadtest.jmx -l result4.csv -e -o resultfor50users3'
+          Start-Sleep -Seconds 600
+          .\\jmeter -n -t loadtest.jmx -l result1.csv -e -o resultfor50users'
