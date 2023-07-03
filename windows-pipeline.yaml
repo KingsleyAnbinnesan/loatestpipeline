@@ -54,7 +54,7 @@ steps:
         --name $vmName \
         --command-id RunPowerShellScript \
         --scripts '
-          Start-Sleep -Seconds 300
+          Start-Sleep -Seconds 400
           cd C:\\Users\\syncfusion\\Downloads\\apache-jmeter-5.5\\apache-jmeter-5.5\\bin
           Start-Sleep -Seconds 10
           .\\jmeter -n -t loadtest123.jmx -l result.csv -e -o result
