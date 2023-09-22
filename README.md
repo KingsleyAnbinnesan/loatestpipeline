@@ -1,1 +1,1 @@
-# loatestpipeline
+# loatestpipeline for daily loadtest result
