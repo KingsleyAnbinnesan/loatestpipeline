@@ -11,5 +11,5 @@ steps:
     connection: 'kingsley-dockerimage'
     userRepository: 'KingsleyAnbinnesan/loatestpipeline'
     defaultVersionType: 'specificVersion'
-    version: '7.0.0'
+    version: '1.0.0'
     downloadPath: '$(System.ArtifactsDirectory)'
