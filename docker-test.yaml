@@ -10,5 +10,4 @@ steps:
   inputs:
     connection: 'kingsley-dockerimage'
     userRepository: 'KingsleyAnbinnesan/loatestpipeline'
-    version: 'v1.0.0'
     downloadPath: '$(System.ArtifactsDirectory)'
