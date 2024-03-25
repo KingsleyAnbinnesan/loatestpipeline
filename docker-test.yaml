@@ -6,10 +6,10 @@ pool:
   vmImage: 'ubuntu-latest'
 
 steps:
-- task: DownloadGitHubRelease@0
+- task: Docker@2
   inputs:
-    connection: 'kingsley-dockerimage'
-    userRepository: 'KingsleyAnbinnesan/loatestpipeline'
-    defaultVersionType: 'specificVersion'
-    version: '1.0.0'
-    downloadPath: '$(System.ArtifactsDirectory)'
+    containerRegistry: 'dockeimage-kings-test'
+    repository: 'kingsleywills/scanning'
+    command: 'buildAndPush'
+    Dockerfile: 'WebApplication1/Dockerfile'
+    tags: '$(Build.BuildId)-$(Build.SourceVersion)'
