@@ -1,45 +1,45 @@
 trigger:
-- none
+  - none
 
 jobs:
-- job: Imagecreation
-  displayName: Image creation
-  pool:
-    vmImage: 'ubuntu-latest'
+  - job: Imagecreation
+    displayName: 'Image creation'
+    pool:
+      vmImage: 'ubuntu-latest'
 
-  steps:
-  - task: PowerShell@2
-    inputs:
-      targetType: 'inline'
-      script: 'sudo docker run --privileged --rm tonistiigi/binfmt --install all'
+    steps:
+      - task: PowerShell@2
+        inputs:
+          targetType: 'inline'
+          script: 'sudo docker run --privileged --rm tonistiigi/binfmt --install all'
 
-  - task: PowerShell@2
-    inputs:
-      targetType: 'inline'
-      script: 'sudo docker buildx ls'
+      - task: PowerShell@2
+        inputs:
+          targetType: 'inline'
+          script: 'sudo docker buildx ls'
 
-  - task: Docker@2
-    inputs:
-      containerRegistry: 'dockeimage-kings-test'
-      repository: 'kingsleywills/scanning'
-      command: 'buildAndPush'
-      Dockerfile: 'WebApplication1/Dockerfile'
-      tags: '$(Build.BuildId)-$(Build.SourceVersion)'
+      - task: Docker@2
+        inputs:
+          containerRegistry: 'dockeimage-kings-test'
+          repository: 'kingsleywills/scanning'
+          command: 'buildAndPush'
+          Dockerfile: 'WebApplication1/Dockerfile'
+          tags: '$(Build.BuildId)-$(Build.SourceVersion)'
 
-- job: siteupdate
-  displayName: site update
-  pool:
-    vmImage: 'Ubuntu-latest'
-    environment:
-      name: hotfix-loadtest-linux
-      resourceType: VirtualMachine
-  steps: 
-  - task: Bash@3
-    displayName: 'Deploy to VM'
-    inputs:
-      targetType: 'inline'
-      script: |
-        cd /home/syncfusion/
-        docker stop boldbi
-        docker rm -f boldbi
-        docker run --name boldbi -p 80:80 -d kingsleywills/scanning:53350-b4315a266d3b9a8d7afcf206593796e6c63b3f46
+  - job: siteupdate
+    displayName: 'Site update'
+    pool:
+      vmImage: 'ubuntu-latest'
+      environment:
+        name: 'hotfix-loadtest-linux'
+        resourceType: 'VirtualMachine'
+    steps:
+      - task: Bash@3
+        displayName: 'Deploy to VM'
+        inputs:
+          targetType: 'inline'
+          script: |
+            cd /home/syncfusion/
+            docker stop boldbi
+            docker rm -f boldbi
+            docker run --name boldbi -p 80:80 -d kingsleywills/scanning:53350-b4315a266d3b9a8d7afcf206593796e6c63b3f46
