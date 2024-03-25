@@ -6,10 +6,39 @@ pool:
   vmImage: 'ubuntu-latest'
 
 steps:
-- task: Docker@2
+  - task: PowerShell@2
+    inputs:
+      targetType: 'inline'
+      script: 'sudo docker run --privileged --rm tonistiigi/binfmt --install all'
+
+  - task: PowerShell@2
+    inputs:
+      targetType: 'inline'
+      script: 'sudo docker buildx ls'
+
+  - task: Docker@2
+    inputs:
+      containerRegistry: 'dockeimage-kings-test'
+      repository: 'kingsleywills/scanning'
+      command: 'buildAndPush'
+      Dockerfile: 'WebApplication1/Dockerfile'
+      tags: '$(Build.BuildId)-$(Build.SourceVersion)'
+
+- jobs:
+  deployment: VMDeploy
+  displayName: Site-update
+
+  pool:
+    vmImage: 'Ubuntu-latest'
+  environment:
+    name: dockerimage-kingsley
+    resourceType: VirtualMachine
+
+- task: Bash@3
   inputs:
-    containerRegistry: 'dockeimage-kings-test'
-    repository: 'kingsleywills/scanning'
-    command: 'buildAndPush'
-    Dockerfile: 'WebApplication1/Dockerfile'
-    tags: '$(Build.BuildId)-$(Build.SourceVersion)'
+    targetType: 'inline'
+    script: |
+      cd /home/syncfusion/
+      docker stop boldbi
+      docker rm -f boldbi
+      docker run --name boldbi -p 80:80 -d kingsleywills/scanning:53350-b4315a266d3b9a8d7afcf206593796e6c63b3f46
