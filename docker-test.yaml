@@ -31,7 +31,7 @@ jobs:
     pool:
       vmImage: 'ubuntu-latest'
       environment:
-        name: 'hotfix-loadtest-linux'
+        name: 'dockeimage-kings-test'
         resourceType: 'VirtualMachine'
     steps:
       - task: Bash@3
