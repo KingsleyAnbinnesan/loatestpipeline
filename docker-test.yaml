@@ -1,11 +1,12 @@
-
 trigger:
 - none
 
-pool:
-  vmImage: 'ubuntu-latest'
-
-steps:
+jobs:
+- job: Imagecreation
+  displayName: Image creation
+  pool:
+    vmImage: 'ubuntu-latest'
+  steps:
   - task: PowerShell@2
     inputs:
       targetType: 'inline'
@@ -24,21 +25,21 @@ steps:
       Dockerfile: 'WebApplication1/Dockerfile'
       tags: '$(Build.BuildId)-$(Build.SourceVersion)'
 
-- jobs:
-  deployment: VMDeploy
-  displayName: Site-update
-
+- job: siteupdate
+  displayName: site update
   pool:
     vmImage: 'Ubuntu-latest'
-  environment:
-    name: dockerimage-kingsley
-    resourceType: VirtualMachine
-
-- task: Bash@3
-  inputs:
-    targetType: 'inline'
-    script: |
-      cd /home/syncfusion/
-      docker stop boldbi
-      docker rm -f boldbi
-      docker run --name boldbi -p 80:80 -d kingsleywills/scanning:53350-b4315a266d3b9a8d7afcf206593796e6c63b3f46
+  steps:
+  - deployment: VMDeploy
+    environment: 
+      name: 'dockerimage-kingsley'
+      resourceType: 'VirtualMachine'
+    displayName: 'Deploy to VM'
+    task: Bash@3
+    inputs:
+      targetType: 'inline'
+      script: |
+        cd /home/syncfusion/
+        docker stop boldbi
+        docker rm -f boldbi
+        docker run --name boldbi -p 80:80 -d kingsleywills/scanning:53350-b4315a266d3b9a8d7afcf206593796e6c63b3f46
