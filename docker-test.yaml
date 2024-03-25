@@ -29,13 +29,9 @@ jobs:
   displayName: site update
   pool:
     vmImage: 'Ubuntu-latest'
-  steps:
-  - deployment: VMDeploy
-    environment: 
-      name: 'dockerimage-kingsley'
-      resourceType: 'VirtualMachine'
+  steps: 
+  - task: Bash@3
     displayName: 'Deploy to VM'
-    task: Bash@3
     inputs:
       targetType: 'inline'
       script: |
