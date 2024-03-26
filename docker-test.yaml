@@ -28,21 +28,13 @@ jobs:
           Dockerfile: 'WebApplication1/Dockerfile'
           tags: '$(Build.BuildId)-$(Build.SourceVersion)'
 
-  - job: siteupdate
-    displayName: 'Site update'
-    dependsOn: Imagecreation
-    pool:
-      vmImage: 'ubuntu-latest'
-    environment:
-      name: 'kings-dockerimage'
-      resourceType: 'VirtualMachine'
-    steps:
-      - task: Bash@3
-        displayName: 'Deploy to VM'
+      - task: SSH@0
         inputs:
-          targetType: 'inline'
-          script: |
+          sshEndpoint: 'docker-kings-ssh'
+          runOptions: 'inline'
+          inline: |
             cd /home/syncfusion
             docker stop boldbi || true  # To ignore if the container doesn't exist
             docker rm -f boldbi || true  # To ignore if the container doesn't exist
             docker run --name boldbi -p 80:80 -d kingsleywills/scanning:53350-b4315a266d3b9a8d7afcf206593796e6c63b3f46
+          readyTimeout: '20000'
