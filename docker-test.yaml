@@ -11,12 +11,14 @@ jobs:
       - task: PowerShell@2
         inputs:
           targetType: 'inline'
-          script: 'sudo docker run --privileged --rm tonistiigi/binfmt --install all'
+          script: |
+            sudo docker run --privileged --rm tonistiigi/binfmt --install all
 
       - task: PowerShell@2
         inputs:
           targetType: 'inline'
-          script: 'sudo docker buildx ls'
+          script: |
+            sudo docker buildx ls
 
       - task: Docker@2
         inputs:
@@ -28,18 +30,19 @@ jobs:
 
   - job: siteupdate
     displayName: 'Site update'
+    dependsOn: Imagecreation
     pool:
       vmImage: 'ubuntu-latest'
-      environment:
-        name: 'kings-dockerimage'
-        resourceType: 'VirtualMachine'
+    environment:
+      name: 'kings-dockerimage'
+      resourceType: 'VirtualMachine'
     steps:
       - task: Bash@3
         displayName: 'Deploy to VM'
         inputs:
           targetType: 'inline'
           script: |
-            cd /home/syncfusion/
-            docker stop boldbi
-            docker rm -f boldbi
+            cd /home/syncfusion
+            docker stop boldbi || true  # To ignore if the container doesn't exist
+            docker rm -f boldbi || true  # To ignore if the container doesn't exist
             docker run --name boldbi -p 80:80 -d kingsleywills/scanning:53350-b4315a266d3b9a8d7afcf206593796e6c63b3f46
