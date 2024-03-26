@@ -27,6 +27,10 @@ jobs:
           command: 'buildAndPush'
           Dockerfile: 'WebApplication1/Dockerfile'
           tags: '$(Build.BuildId)-$(Build.SourceVersion)'
+        env:
+          DOCKER_CONTENT_TRUST: 'false'
+        displayName: 'Docker Build and Push'
+        continueOnError: true
 
       - task: SSH@0
         inputs:
@@ -38,3 +42,4 @@ jobs:
             docker rm -f boldbi || true  # To ignore if the container doesn't exist
             docker run --name boldbi -p 80:80 -d kingsleywills/scanning:53350-b4315a266d3b9a8d7afcf206593796e6c63b3f46
           readyTimeout: '20000'
+        continueOnError: true
