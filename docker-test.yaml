@@ -43,6 +43,6 @@ jobs:
             cd /home/syncfusion
             docker stop boldbi || true  # To ignore if the container doesn't exist
             docker rm -f boldbi || true  # To ignore if the container doesn't exist
-            docker run --name boldbi -p 80:80 -d kingsleywills/scanning:$(tag)  # Use the defined variable here
+            docker run --name boldbi -p 80:80 -d kingsleywills/scanning:$(tag) > /dev/null 2>&1 # Use the defined variable here
           readyTimeout: '20000'
         continueOnError: true
