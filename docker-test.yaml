@@ -7,6 +7,9 @@ jobs:
     pool:
       vmImage: 'ubuntu-latest'
 
+    variables:
+      tag: '$(Build.BuildId)-$(Build.SourceVersion)'  # Define a variable to store the tag
+
     steps:
       - task: PowerShell@2
         inputs:
@@ -26,7 +29,7 @@ jobs:
           repository: 'kingsleywills/scanning'
           command: 'buildAndPush'
           Dockerfile: 'WebApplication1/Dockerfile'
-          tags: '$(Build.BuildId)-$(Build.SourceVersion)'
+          tags: '$(tag)'  # Use the defined variable here
         env:
           DOCKER_CONTENT_TRUST: 'false'
         displayName: 'Docker Build and Push'
@@ -40,6 +43,6 @@ jobs:
             cd /home/syncfusion
             docker stop boldbi || true  # To ignore if the container doesn't exist
             docker rm -f boldbi || true  # To ignore if the container doesn't exist
-            docker run --name boldbi -p 80:80 -d kingsleywills/scanning:53350-b4315a266d3b9a8d7afcf206593796e6c63b3f46
+            docker run --name boldbi -p 80:80 -d kingsleywills/scanning:$(tag)  # Use the defined variable here
           readyTimeout: '20000'
         continueOnError: true
