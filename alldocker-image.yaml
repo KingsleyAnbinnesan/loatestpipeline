@@ -15,8 +15,7 @@ parameters:
 jobs:
   - job: DockerImagecreation
     displayName: 'Docker image creation'
-    pool:
-      vmImage: 'ubuntu-latest'
+    timeoutInMinutes: 0
 
     steps:
       - task: PowerShell@2
