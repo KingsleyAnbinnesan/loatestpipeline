@@ -8,9 +8,12 @@ trigger:
   - none
 
 parameters:
-  - name: linux-package
+  - name: linux_package
     displayName: LinuxPackage
     type: string
+
+variables:
+  LinuxPackage: ${{parameters.linux_package}}
 
 jobs:
   - job: DockerImagecreation
@@ -34,10 +37,10 @@ jobs:
         inputs:
           targetType: 'inline'
           script: |
-            sudo wget $(Linuxpackage)
+            sudo wget $LinuxPackage
             sudo apt install unzip 
             sudo unzip BoldBIEnterpriseEdition_Linux_*
-            TAG=$(echo "$(Linuxpackage)" | grep -oP 'Linux_Docker_\K[\d\.]+_\d{8}_\d{6}')
+            TAG=$(echo "$LinuxPackage" | grep -oP 'Linux_Docker_\K[\d\.]+_\d{8}_\d{6}')
             echo "Text File URL: $TAG"
 
       - task: Docker@2
