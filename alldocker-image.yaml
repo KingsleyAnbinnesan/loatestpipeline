@@ -4,10 +4,39 @@
 # https://aka.ms/yaml
 
 
-trigger: none
+trigger:
+  - none
 
 jobs:
+  - job: DockerImagecreation
+    displayName: 'Docker image creation'
+    pool:
+      vmImage: 'ubuntu-latest'
 
-- job: DeploymentJob
-  displayName: deployment job
-  timeoutInMinutes: 0
+    steps:
+      - task: PowerShell@2
+        inputs:
+          targetType: 'inline'
+          script: |
+            sudo docker run --privileged --rm tonistiigi/binfmt --install all
+
+      - task: PowerShell@2
+        inputs:
+          targetType: 'inline'
+          script: |
+            sudo docker buildx ls
+
+      - task: Bash@3
+        inputs:
+          targetType: 'inline'
+          script: |
+            sudo wget $(Linux-docker-pacakge)
+            sudo apt install unzip 
+            sudo unzip BoldBIEnterpriseEdition_Linux_*
+
+      - task: Docker@2
+        inputs:
+          containerRegistry: 'dockeimage-kings-test'
+          repository: '''kingsleywills/scanning'''
+          command: 'buildAndPush'
+          Dockerfile: 'BoldBIEnterpriseEdition-Linux/boldbi-debian.Dockerfile'
