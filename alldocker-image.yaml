@@ -8,7 +8,7 @@ trigger:
   - none
 
 parameters:
-  - name:  linux-package
+  - name: linux-package
     displayName: LinuxPackage
     type: string
 
@@ -35,15 +35,16 @@ jobs:
         inputs:
           targetType: 'inline'
           script: |
-            sudo wget $(Linux-docker-pacakge)
+            sudo wget $linux-package
             sudo apt install unzip 
             sudo unzip BoldBIEnterpriseEdition_Linux_*
-            TAG=$(echo "$(Linux-docker-pacakge)" | grep -oP 'Linux_Docker_\K[\d\.]+_\d{8}_\d{6}')
+            TAG=$(echo "$linux-package" | grep -oP 'Linux_Docker_\K[\d\.]+_\d{8}_\d{6}')
             echo "Text File URL: $TAG"
 
       - task: Docker@2
         inputs:
           containerRegistry: 'dockeimage-kings-test'
-          repository: '''kingsleywills/scanning'''
+          repository: 'kingsleywills/scanning'
           command: 'buildAndPush'
           Dockerfile: 'BoldBIEnterpriseEdition-Linux/boldbi-debian.Dockerfile'
+          tags: '$TAG'
