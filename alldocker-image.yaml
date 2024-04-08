@@ -7,6 +7,11 @@
 trigger:
   - none
 
+parameters:
+  - name:  linux-package
+    displayName: LinuxPackage
+    type: string
+
 jobs:
   - job: DockerImagecreation
     displayName: 'Docker image creation'
