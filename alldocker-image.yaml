@@ -11,6 +11,11 @@ parameters:
     displayName: LinuxPackage
     type: string
 
+  - name: AllImages
+    displayName: Build all images
+    type: boolean
+    default: false
+     
   - name: Ubuntu
     displayName: Ubuntu
     type: boolean
@@ -39,7 +44,7 @@ parameters:
     displayName: Alpine-Arm64
     type: boolean
     default: false
-    
+
 jobs:
   - job: DockerImagecreation
     displayName: 'Docker image creation'
