@@ -38,7 +38,7 @@ jobs:
             sudo wget '${{parameters.linux_package}}'
             sudo apt install unzip 
             sudo unzip BoldBIEnterpriseEdition_Linux_*
-            TAG=$(echo "$LinuxPackage" | grep -oP 'Linux_Docker_\K[\d\.]+_\d{8}_\d{6}')
+            TAG=$(echo "${{parameters.linux_package}}" | grep -oP 'Linux_Docker_\K[\d\.]+_\d{8}_\d{6}')
             echo "Text File URL: $TAG"
 
       - task: Docker@2
