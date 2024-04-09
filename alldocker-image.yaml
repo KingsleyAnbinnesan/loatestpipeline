@@ -34,7 +34,8 @@ jobs:
         inputs:
           targetType: 'inline'
           script: |
-            sudo wget https://s3.amazonaws.com/files2.syncfusion.com/Installs/BoldBI/08-04-2024/BoldBIEnterpriseEdition_Linux_Docker_7.8.2_04082024_073959.zip
+            FULL_URL="${LinuxPackage}"
+            sudo wget $FULL_URL
             sudo apt install unzip 
             sudo unzip BoldBIEnterpriseEdition_Linux_*
             TAG=$(echo "$LinuxPackage" | grep -oP 'Linux_Docker_\K[\d\.]+_\d{8}_\d{6}')
