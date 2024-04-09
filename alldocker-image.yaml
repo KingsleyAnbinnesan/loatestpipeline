@@ -11,17 +11,15 @@ parameters:
     displayName: LinuxPackage
     type: string
 
-  - name: docker_image_creation
-    displayName: DockerImageCreation
-    type: string
-    default: 'Ubuntu,Debian,Alpine'
-    values:
-      - Ubuntu
-      - Debian
-      - Alpine
-      - Ubuntu-Arm64
-      - Debian-Arm64
-      - Alpine-Arm64
+  - name: Ubuntu
+    displayName: Ubuntu
+    type: boolean
+    default: true
+
+  - name: Debian
+    displayName: Debian
+    type: boolean
+    default: false
 
 jobs:
   - job: DockerImagecreation
