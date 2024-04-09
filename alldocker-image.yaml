@@ -11,32 +11,28 @@ parameters:
     displayName: LinuxPackage
     type: string
 
-  - name: AllImages
-    displayName: Build all images
-    type: boolean
-    default: false
-     
-  - name: Ubuntu
-    displayName: Ubuntu
-    type: boolean
-    default: true
-
   - name: Debian
     displayName: Debian
     type: boolean
     default: false
+
+  - name: Ubuntu
+    displayName: Ubuntu
+    type: boolean
+    default: false
+
   - name: Alpine
     displayName: Alpine
     type: boolean
     default: false
 
-  - name: Ubuntu-Arm64
-    displayName: Ubuntu-Arm64
+  - name: Debian-Arm64
+    displayName: Debian-Arm64
     type: boolean
     default: false
 
-  - name: Debian-Arm64
-    displayName: Debian-Arm64
+  - name: Ubuntu-Arm64
+    displayName: Ubuntu-Arm64
     type: boolean
     default: false
 
@@ -76,22 +72,26 @@ jobs:
             echo "##vso[task.setvariable variable=TAG]$IMAGE_TAG"
             echo "Find the Tag: $TAG"
 
-      - task: Docker@2
-        inputs:
-          containerRegistry: 'dockeimage-kings-test'
-          repository: 'kingsleywills/scanning'
-          command: 'buildAndPush'
-          Dockerfile: BoldBIEnterpriseEdition-Linux/boldbi-debian.Dockerfile
-          tags: |
-            $(TAG)_Debian
-        displayName: Docker push Debian Image
-
-      - task: Docker@2
-        inputs:
-          containerRegistry: 'dockeimage-kings-test'
-          repository: 'kingsleywills/scanning'
-          command: 'buildAndPush'
-          Dockerfile: BoldBIEnterpriseEdition-Linux/boldbi-ubuntu.Dockerfile
-          tags: |
-            $(TAG)_Ubuntu
-        displayName: Docker push Ubuntu Image
+      - ${{ if eq(parameters.Debian, true) }}:
+        - task: Docker@2
+          inputs:
+            containerRegistry: 'dockeimage-kings-test'
+            repository: 'kingsleywills/scanning'
+            command: 'buildAndPush'
+            Dockerfile: BoldBIEnterpriseEdition-Linux/boldbi-debian.Dockerfile
+            tags: |
+              $(TAG)_Debian
+          displayName: Docker push Debian Image
+          continueOnError: true   # Adding continueOnError directive at the task level
+      
+      - ${{ if eq(parameters.Ubuntu, true) }}:
+        - task: Docker@2
+          inputs:
+            containerRegistry: 'dockeimage-kings-test'
+            repository: 'kingsleywills/scanning'
+            command: 'buildAndPush'
+            Dockerfile: BoldBIEnterpriseEdition-Linux/boldbi-ubuntu.Dockerfile
+            tags: |
+              $(TAG)_Ubuntu
+          displayName: Docker push Ubuntu Image
+          continueOnError: true   # Adding continueOnError directive at the task level
