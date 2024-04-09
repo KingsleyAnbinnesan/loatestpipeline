@@ -20,7 +20,26 @@ parameters:
     displayName: Debian
     type: boolean
     default: false
+  - name: Alpine
+    displayName: Alpine
+    type: boolean
+    default: false
 
+  - name: Ubuntu-Arm64
+    displayName: Ubuntu-Arm64
+    type: boolean
+    default: false
+
+  - name: Debian-Arm64
+    displayName: Debian-Arm64
+    type: boolean
+    default: false
+
+  - name: Alpine-Arm64
+    displayName: Alpine-Arm64
+    type: boolean
+    default: false
+    
 jobs:
   - job: DockerImagecreation
     displayName: 'Docker image creation'
