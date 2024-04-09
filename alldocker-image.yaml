@@ -46,5 +46,6 @@ jobs:
           containerRegistry: 'dockeimage-kings-test'
           repository: 'kingsleywills/scanning'
           command: 'buildAndPush'
-          Dockerfile: 'BoldBIEnterpriseEdition-Linux/boldbi-debian.Dockerfile'
-          tags: '$(TAG)'
+          Dockerfile: BoldBIEnterpriseEdition-Linux/boldbi-debian.Dockerfile
+          tags: '$(TAG)_Debian'
+        displayName: Docker push Image
