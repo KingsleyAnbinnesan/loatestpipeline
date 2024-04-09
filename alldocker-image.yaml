@@ -47,5 +47,6 @@ jobs:
           repository: 'kingsleywills/scanning'
           command: 'buildAndPush'
           Dockerfile: BoldBIEnterpriseEdition-Linux/boldbi-debian.Dockerfile
-          tags: '$(TAG)_Debian'
+          tags: |
+            $(TAG)_Debian
         displayName: Docker push Image
