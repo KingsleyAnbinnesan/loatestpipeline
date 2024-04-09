@@ -11,6 +11,19 @@ parameters:
     displayName: LinuxPackage
     type: string
 
+  - name:  docker_image_creation
+    displayName: DockerImageCreation
+    type: string
+    values:
+      - None
+      - All
+      - Ubuntu
+      - Debian
+      - Alpine
+      - Debian-Arm64
+      - Ubuntu-Arm64
+      - Alpine-Arm64
+
 jobs:
   - job: DockerImagecreation
     displayName: 'Docker image creation'
@@ -50,4 +63,14 @@ jobs:
           Dockerfile: BoldBIEnterpriseEdition-Linux/boldbi-debian.Dockerfile
           tags: |
             $(TAG)_Debian
-        displayName: Docker push Image
+        displayName: Docker push Debian Image
+
+      - task: Docker@2
+        inputs:
+          containerRegistry: 'dockeimage-kings-test'
+          repository: 'kingsleywills/scanning'
+          command: 'buildAndPush'
+          Dockerfile: BoldBIEnterpriseEdition-Linux/boldbi-ubuntu.Dockerfile
+          tags: |
+            $(TAG)_Ubuntu
+        displayName: Docker push Ubuntu Image
