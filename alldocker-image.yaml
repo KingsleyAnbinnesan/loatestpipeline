@@ -130,13 +130,13 @@ jobs:
         inputs:
           targetType: 'inline'
           script: |
-            if [ ${{ parameters.Alpine }} = true ] || [ ${{ parameters.Alpine_Arm64 }} = true ]; then
+            if (${{ parameters.Alpine }} -eq $true -or ${{ parameters.Alpine_Arm64 }} -eq $true) {
               sudo docker rmi $(docker images -q) -f
               sudo docker system prune -a --force
               sudo docker run --privileged --rm tonistiigi/binfmt --install all
               sudo docker buildx ls
               sudo cp -r BoldBIEnterpriseEdition-Linux/entrypoint.sh BoldBIEnterpriseEdition-Linux/application/
-            fi
+            }
         
       - ${{ if eq(parameters.Alpine, true) }}:
         - task: Docker@2
