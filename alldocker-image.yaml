@@ -15,8 +15,9 @@ jobs:
   - job: DockerImagecreation
     displayName: 'Docker image creation'
     timeoutInMinutes: 0
-    variables:
-      LinuxPackage: ${{parameters.linux_package}}
+    pool:
+     vmImage: 'Ubuntu-latest'
+    
     steps:
       - task: PowerShell@2
         inputs:
@@ -34,8 +35,7 @@ jobs:
         inputs:
           targetType: 'inline'
           script: |
-            FULL_URL="${LinuxPackage}"
-            sudo wget $FULL_URL
+            sudo wget '${{parameters.linux_package}}'
             sudo apt install unzip 
             sudo unzip BoldBIEnterpriseEdition_Linux_*
             TAG=$(echo "$LinuxPackage" | grep -oP 'Linux_Docker_\K[\d\.]+_\d{8}_\d{6}')
