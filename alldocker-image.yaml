@@ -26,18 +26,18 @@ parameters:
     type: boolean
     default: false
 
-  - name: Debian-Arm64
-    displayName: Debian-Arm64
+  - name: Debian_Arm64
+    displayName: Debian_Arm64
     type: boolean
     default: false
 
-  - name: Ubuntu-Arm64
-    displayName: Ubuntu-Arm64
+  - name: Ubuntu_Arm64
+    displayName: Ubuntu_Arm64
     type: boolean
     default: false
 
-  - name: Alpine-Arm64
-    displayName: Alpine-Arm64
+  - name: Alpine_Arm64
+    displayName: Alpine_Arm64
     type: boolean
     default: false
 
@@ -96,3 +96,68 @@ jobs:
               $(TAG)_Ubuntu
           displayName: Docker push Ubuntu Image
           continueOnError: true   # Adding continueOnError directive at the task level
+        
+      - script: |
+          sudo docker rmi $(docker images -q) -f
+          sudo docker system prune -a --force
+          sudo docker run --privileged --rm tonistiigi/binfmt --install all
+          sudo docker buildx ls
+
+      - ${{ if eq(parameters.Debian_Arm64, true) }}:
+        - task: Docker@2
+          inputs:
+            containerRegistry: 'dockeimage-kings-test'
+            repository: 'kingsleywills/scanning'
+            command: 'buildAndPush'
+            Dockerfile: BoldBIEnterpriseEdition-Linux/boldbi-debian-arm64.Dockerfile
+            tags: |
+              $(TAG)_Ubuntu
+          displayName: Docker push Debian-Arm64 Image
+          continueOnError: true   # Adding continueOnError directive at the task level
+
+      - ${{ if eq(parameters.Ubuntu_Arm64, true) }}:
+        - task: Docker@2
+          inputs:
+            containerRegistry: 'dockeimage-kings-test'
+            repository: 'kingsleywills/scanning'
+            command: 'buildAndPush'
+            Dockerfile: BoldBIEnterpriseEdition-Linux/boldbi-ubuntu-arm64.Dockerfile
+            tags: |
+              $(TAG)_Ubuntu
+          displayName: Docker push Ubuntu-Arm64 Image
+          continueOnError: true   # Adding continueOnError directive at the task level
+      - task: PowerShell@2
+        inputs:
+          targetType: 'inline'
+          script: |
+            if [ ${{ parameters.Alpine }} = true ] || [ ${{ parameters.Alpine_Arm64 }} = true ]; then
+              sudo docker rmi $(docker images -q) -f
+              sudo docker system prune -a --force
+              sudo docker run --privileged --rm tonistiigi/binfmt --install all
+              sudo docker buildx ls
+              sudo cp -r BoldBIEnterpriseEdition-Linux/entrypoint.sh BoldBIEnterpriseEdition-Linux/application/
+            fi
+        
+      - ${{ if eq(parameters.Alpine, true) }}:
+        - task: Docker@2
+          inputs:
+            containerRegistry: 'dockeimage-kings-test'
+            repository: 'kingsleywills/scanning'
+            command: 'buildAndPush'
+            Dockerfile: BoldBIEnterpriseEdition-Linux/boldbi-alpine.Dockerfile
+            tags: |
+              $(TAG)_Ubuntu
+          displayName: Docker push Alpine Image
+          continueOnError: true   # Adding continueOnError directive at the task level
+        
+      - ${{ if eq(parameters.Alpine_Arm64, true) }}:
+        - task: Docker@2
+          inputs:
+            containerRegistry: 'dockeimage-kings-test'
+            repository: 'kingsleywills/scanning'
+            command: 'buildAndPush'
+            Dockerfile: BoldBIEnterpriseEdition-Linux/boldbi-ubuntu.Dockerfile
+            tags: |
+              $(TAG)_Ubuntu
+          displayName: Docker push Alpine-Arm64 Image
+          continueOnError: true   # Adding continueOnError directive at the task level  
