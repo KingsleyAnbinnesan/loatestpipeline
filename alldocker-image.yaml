@@ -3,7 +3,6 @@
 # Add steps that build, run tests, deploy, and more:
 # https://aka.ms/yaml
 
-
 trigger:
   - none
 
@@ -12,25 +11,13 @@ parameters:
     displayName: LinuxPackage
     type: string
 
-variables:
-  LinuxPackage: ${{parameters.linux_package}}
-
 jobs:
   - job: DockerImagecreation
     displayName: 'Docker image creation'
     timeoutInMinutes: 0
-
+    variables:
+      LinuxPackage: ${{parameters.linux_package}}
     steps:
-      - task: DownloadPipelineArtifact@2 
-        inputs: 
-          buildType: 'specific'
-          project: '<YourProjectName>'
-          pipeline: '<YourPipelineName>'
-          buildId: '$(build-link)' # Use the parameter value here
-          downloadType: 'single'
-          artifactName: '<YourArtifactName>' # Specify the artifact name you want to download
-          downloadPath: '$(Build.ArtifactStagingDirectory)'
-        continueOnError: true
       - task: PowerShell@2
         inputs:
           targetType: 'inline'
@@ -59,4 +46,4 @@ jobs:
           repository: 'kingsleywills/scanning'
           command: 'buildAndPush'
           Dockerfile: 'BoldBIEnterpriseEdition-Linux/boldbi-debian.Dockerfile'
-          tags: '$TAG'
+          tags: '$(TAG)'
