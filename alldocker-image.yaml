@@ -159,13 +159,13 @@ jobs:
               sudo docker rmi $(sudo docker images -q)
         
       - ${{ if eq(parameters.Alpine, true) }}:
-        - task: PowerShell@2
+        - task: Bash@3
           inputs:
             targetType: 'inline'
             script: |
-              if (${{ parameters.Alpine }} -eq $true) {
+              if [ "${{ parameters.Alpine }}" = "true" ]; then
                 sudo cp -r BoldBIEnterpriseEdition-Linux/entrypoint.sh BoldBIEnterpriseEdition-Linux/application/
-              }
+              fi
         - task: Docker@2
           inputs:
             containerRegistry: 'dockeimage-kings-test'
