@@ -84,7 +84,16 @@ jobs:
               $(TAG)_Debian
           displayName: Docker push Debian Image
           continueOnError: true   # Adding continueOnError directive at the task level
-      
+          env:
+            DOCKER_CLI_EXPERIMENTAL: enabled
+          
+          # Cleanup command runs after the Docker push
+        - task: Bash@3
+          inputs:
+            targetType: 'inline'
+            script: |
+              sudo docker rmi $(sudo docker images -q)
+
       - ${{ if eq(parameters.Ubuntu, true) }}:
         - task: Docker@2
           inputs:
@@ -96,12 +105,16 @@ jobs:
               $(TAG)_Ubuntu
           displayName: Docker push Ubuntu Image
           continueOnError: true   # Adding continueOnError directive at the task level
-        
-      - script: |
-          sudo docker rmi $(docker images -q) -f
-          sudo docker system prune -a --force
-          sudo docker run --privileged --rm tonistiigi/binfmt --install all
-          sudo docker buildx ls
+          env:
+            DOCKER_CLI_EXPERIMENTAL: enabled
+          
+          # Cleanup command runs after the Docker push
+        - task: Bash@3
+          inputs:
+            targetType: 'inline'
+            script: |
+              sudo docker rmi $(sudo docker images -q)
+          
 
       - ${{ if eq(parameters.Debian_Arm64, true) }}:
         - task: Docker@2
