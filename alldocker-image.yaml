@@ -127,6 +127,15 @@ jobs:
               $(TAG)_Ubuntu
           displayName: Docker push Debian-Arm64 Image
           continueOnError: true   # Adding continueOnError directive at the task level
+          env:
+            DOCKER_CLI_EXPERIMENTAL: enabled
+          
+          # Cleanup command runs after the Docker push
+        - task: Bash@3
+          inputs:
+            targetType: 'inline'
+            script: |
+              sudo docker rmi $(sudo docker images -q)
 
       - ${{ if eq(parameters.Ubuntu_Arm64, true) }}:
         - task: Docker@2
@@ -139,19 +148,24 @@ jobs:
               $(TAG)_Ubuntu
           displayName: Docker push Ubuntu-Arm64 Image
           continueOnError: true   # Adding continueOnError directive at the task level
-      - task: PowerShell@2
-        inputs:
-          targetType: 'inline'
-          script: |
-            if (${{ parameters.Alpine }} -eq $true -or ${{ parameters.Alpine_Arm64 }} -eq $true) {
-              sudo docker rmi $(docker images -q) -f
-              sudo docker system prune -a --force
-              sudo docker run --privileged --rm tonistiigi/binfmt --install all
-              sudo docker buildx ls
-              sudo cp -r BoldBIEnterpriseEdition-Linux/entrypoint.sh BoldBIEnterpriseEdition-Linux/application/
-            }
+          env:
+            DOCKER_CLI_EXPERIMENTAL: enabled
+          
+          # Cleanup command runs after the Docker push
+        - task: Bash@3
+          inputs:
+            targetType: 'inline'
+            script: |
+              sudo docker rmi $(sudo docker images -q)
         
       - ${{ if eq(parameters.Alpine, true) }}:
+        - task: PowerShell@2
+          inputs:
+            targetType: 'inline'
+            script: |
+              if (${{ parameters.Alpine }} -eq $true) {
+                sudo cp -r BoldBIEnterpriseEdition-Linux/entrypoint.sh BoldBIEnterpriseEdition-Linux/application/
+              }
         - task: Docker@2
           inputs:
             containerRegistry: 'dockeimage-kings-test'
@@ -162,6 +176,15 @@ jobs:
               $(TAG)_Ubuntu
           displayName: Docker push Alpine Image
           continueOnError: true   # Adding continueOnError directive at the task level
+          env:
+            DOCKER_CLI_EXPERIMENTAL: enabled
+          
+          # Cleanup command runs after the Docker push
+        - task: Bash@3
+          inputs:
+            targetType: 'inline'
+            script: |
+              sudo docker rmi $(sudo docker images -q)
         
       - ${{ if eq(parameters.Alpine_Arm64, true) }}:
         - task: Docker@2
@@ -173,4 +196,13 @@ jobs:
             tags: |
               $(TAG)_Ubuntu
           displayName: Docker push Alpine-Arm64 Image
-          continueOnError: true   # Adding continueOnError directive at the task level  
+          continueOnError: true   # Adding continueOnError directive at the task level
+          env:
+            DOCKER_CLI_EXPERIMENTAL: enabled
+          
+          # Cleanup command runs after the Docker push
+        - task: Bash@3
+          inputs:
+            targetType: 'inline'
+            script: |
+              sudo docker rmi $(sudo docker images -q)  
