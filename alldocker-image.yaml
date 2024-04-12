@@ -73,6 +73,7 @@ jobs:
             echo "Find the Tag: $TAG"
             if [ "${{ parameters.Alpine }}" = "true" ]; then
                 sudo cp -r BoldBIEnterpriseEdition-Linux/entrypoint.sh BoldBIEnterpriseEdition-Linux/application/
+                echo "alpine entrypoint.sh file replaced successfully"
             fi
         continueOnError: true
 
