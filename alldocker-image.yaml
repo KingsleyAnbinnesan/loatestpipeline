@@ -92,7 +92,8 @@ jobs:
           inputs:
             targetType: 'inline'
             script: |
-              sudo docker rmi $(sudo docker images -q)
+              sudo docker rmi $(docker images -q) -f
+              sudo docker system prune -a --force
 
       - ${{ if eq(parameters.Ubuntu, true) }}:
         - task: Docker@2
@@ -113,8 +114,8 @@ jobs:
           inputs:
             targetType: 'inline'
             script: |
-              sudo docker rmi $(sudo docker images -q)
-          
+              sudo docker rmi $(docker images -q) -f
+              sudo docker system prune -a --force
 
       - ${{ if eq(parameters.Debian_Arm64, true) }}:
         - task: Docker@2
@@ -135,7 +136,8 @@ jobs:
           inputs:
             targetType: 'inline'
             script: |
-              sudo docker rmi $(sudo docker images -q)
+              sudo docker rmi $(docker images -q) -f
+              sudo docker system prune -a --force
 
       - ${{ if eq(parameters.Ubuntu_Arm64, true) }}:
         - task: Docker@2
@@ -156,7 +158,8 @@ jobs:
           inputs:
             targetType: 'inline'
             script: |
-              sudo docker rmi $(sudo docker images -q)
+              sudo docker rmi $(docker images -q) -f
+              sudo docker system prune -a --force
         
       - ${{ if eq(parameters.Alpine, true) }}:
         - task: Bash@3
@@ -183,7 +186,8 @@ jobs:
           inputs:
             targetType: 'inline'
             script: |
-              sudo docker rmi $(sudo docker images -q)
+              sudo docker rmi $(docker images -q) -f
+              sudo docker system prune -a --force
         
       - ${{ if eq(parameters.Alpine_Arm64, true) }}:
         - task: Bash@3
@@ -210,4 +214,5 @@ jobs:
           inputs:
             targetType: 'inline'
             script: |
-              sudo docker rmi $(sudo docker images -q)  
+              sudo docker rmi $(docker images -q) -f
+              sudo docker system prune -a --force  
