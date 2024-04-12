@@ -186,12 +186,18 @@ jobs:
               sudo docker rmi $(sudo docker images -q)
         
       - ${{ if eq(parameters.Alpine_Arm64, true) }}:
+        - task: Bash@3
+          inputs:
+            targetType: 'inline'
+            script: |
+              sudo cp -r BoldBIEnterpriseEdition-Linux/entrypoint.sh BoldBIEnterpriseEdition-Linux/application/
+              echo "alpine entrypoint.sh file replaced successfully"
         - task: Docker@2
           inputs:
             containerRegistry: 'dockeimage-kings-test'
             repository: 'kingsleywills/scanning'
             command: 'buildAndPush'
-            Dockerfile: BoldBIEnterpriseEdition-Linux/boldbi-ubuntu.Dockerfile
+            Dockerfile: BoldBIEnterpriseEdition-Linux/boldbi-alpine-arm64.Dockerfile
             tags: |
               $(TAG)_Alpine_Arm64
           displayName: Docker push Alpine-Arm64 Image
