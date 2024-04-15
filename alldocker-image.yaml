@@ -49,6 +49,7 @@ jobs:
         demands:
             - Agent.OS -equals Linux
             - Agent.Architecture -equals arm64
+            - Agent.Version -gtVersion 2.160.0
     
     steps:
       - task: PowerShell@2
