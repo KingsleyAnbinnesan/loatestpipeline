@@ -46,10 +46,7 @@ jobs:
     displayName: 'Docker image creation'
     timeoutInMinutes: 0
     pool:
-        demands:
-            - Agent.OS -equals Linux
-            - Agent.Architecture -equals arm64
-            - Agent.Version -gtVersion 2.160.0
+      vmImage: 'macOS-latest'  
     
     steps:
       - task: PowerShell@2
