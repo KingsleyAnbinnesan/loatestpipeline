@@ -46,7 +46,7 @@ jobs:
     displayName: 'Docker image creation'
     timeoutInMinutes: 0
     pool:
-     vmImage: 'Ubuntu-latest'
+     vmImage: 'Ubuntu-22.04'
      demands:
       - Agent.OS -equals Linux
       - Agent.Architecture -equals arm64
