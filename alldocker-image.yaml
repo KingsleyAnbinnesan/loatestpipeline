@@ -11,6 +11,11 @@ parameters:
     displayName: LinuxPackage
     type: string
 
+  - name: All
+    displayName: All
+    type: boolean
+    default: false
+
   - name: Debian
     displayName: Debian
     type: boolean
@@ -73,7 +78,7 @@ jobs:
             echo "Find the Tag: $IMAGE_TAG"
         continueOnError: true
 
-      - ${{ if eq(parameters.Debian, true) }}:
+      - ${{ if or(eq(parameters.All, true), eq(parameters.Debian, true)) }}:
         - task: Docker@2
           inputs:
             containerRegistry: 'dockeimage-kings-test'
@@ -95,7 +100,7 @@ jobs:
               sudo docker rmi $(docker images -q) -f
               sudo docker system prune -a --force
 
-      - ${{ if eq(parameters.Ubuntu, true) }}:
+      - ${{ if or(eq(parameters.All, true), eq(parameters.Ubuntu, true)) }}:
         - task: Docker@2
           inputs:
             containerRegistry: 'dockeimage-kings-test'
