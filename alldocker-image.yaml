@@ -81,7 +81,7 @@ jobs:
             command: 'buildAndPush'
             Dockerfile: BoldBIEnterpriseEdition-Linux/boldbi-debian.Dockerfile
             tags: |
-              $(TAG)_Debian
+              $(TAG)_Debian_dev
           displayName: Docker push Debian Image
           continueOnError: true   # Adding continueOnError directive at the task level
           env:
@@ -103,7 +103,7 @@ jobs:
             command: 'buildAndPush'
             Dockerfile: BoldBIEnterpriseEdition-Linux/boldbi-ubuntu.Dockerfile
             tags: |
-              $(TAG)_Ubuntu
+              $(TAG)_Ubuntu_dev
           displayName: Docker push Ubuntu Image
           continueOnError: true   # Adding continueOnError directive at the task level
           env:
@@ -125,7 +125,7 @@ jobs:
             command: 'buildAndPush'
             Dockerfile: BoldBIEnterpriseEdition-Linux/boldbi-debian-arm64.Dockerfile
             tags: |
-              $(TAG)_Debian_Arm64
+              $(TAG)_Debian_Arm64_dev
           displayName: Docker push Debian-Arm64 Image
           continueOnError: true   # Adding continueOnError directive at the task level
           env:
@@ -147,7 +147,7 @@ jobs:
             command: 'buildAndPush'
             Dockerfile: BoldBIEnterpriseEdition-Linux/boldbi-ubuntu-arm64.Dockerfile
             tags: |
-              $(TAG)_Ubuntu_Arm64
+              $(TAG)_Ubuntu_Arm64_dev
           displayName: Docker push Ubuntu-Arm64 Image
           continueOnError: true   # Adding continueOnError directive at the task level
           env:
@@ -175,7 +175,7 @@ jobs:
             command: 'buildAndPush'
             Dockerfile: BoldBIEnterpriseEdition-Linux/boldbi-alpine.Dockerfile
             tags: |
-              $(TAG)_Alpine
+              $(TAG)_Alpine_dev
           displayName: Docker push Alpine Image
           continueOnError: true   # Adding continueOnError directive at the task level
           env:
@@ -203,7 +203,7 @@ jobs:
             command: 'buildAndPush'
             Dockerfile: BoldBIEnterpriseEdition-Linux/boldbi-alpine-arm64.Dockerfile
             tags: |
-              $(TAG)_Alpine_Arm64
+              $(TAG)_Alpine_Arm64_dev
           displayName: Docker push Alpine-Arm64 Image
           continueOnError: true   # Adding continueOnError directive at the task level
           env:
