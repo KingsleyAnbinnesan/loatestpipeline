@@ -47,6 +47,9 @@ jobs:
     timeoutInMinutes: 0
     pool:
      vmImage: 'Ubuntu-latest'
+     demands:
+      - Agent.OS -equals Linux
+      - Agent.Architecture -equals arm64
     
     steps:
       - task: PowerShell@2
