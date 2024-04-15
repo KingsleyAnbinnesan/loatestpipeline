@@ -53,6 +53,7 @@ jobs:
         inputs:
           targetType: 'inline'
           script: |
+            sudo apt-get install -y docker.io
             sudo docker run --privileged --rm tonistiigi/binfmt --install all
 
       - task: PowerShell@2
