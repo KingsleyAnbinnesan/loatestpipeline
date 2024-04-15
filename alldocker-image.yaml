@@ -46,10 +46,9 @@ jobs:
     displayName: 'Docker image creation'
     timeoutInMinutes: 0
     pool:
-     vmImage: 'Ubuntu-20.04'
-     demands:
-      - Agent.OS -equals Linux
-      - Agent.Architecture -equals arm64
+        demands:
+            - Agent.OS -equals Linux
+            - Agent.Architecture -equals arm64
     
     steps:
       - task: PowerShell@2
