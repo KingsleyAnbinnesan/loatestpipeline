@@ -23,6 +23,8 @@ jobs:
       inputs:
         targetType: 'inline'
         script: |
+          sudo apt update
+          sudo apt install git
           git config --global credential.helper "store --file=.git-credentials"
           echo "https://SivanesanSyncfusion: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@github.com" >> .git-credentials
           git clone -b hotfix/boldbi_v7 https://github.com/bold-bi/boldbi-ci.git
