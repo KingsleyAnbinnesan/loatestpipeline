@@ -6,10 +6,10 @@
 trigger:
   - none
 
-parameters:
-  - name: linux_package
-    displayName: LinuxPackage
-    type: string
+#parameters:
+ # - name: linux_package
+  #  displayName: LinuxPackage
+   # type: string
 
 jobs:
   - job: KubernetesImagecreation
