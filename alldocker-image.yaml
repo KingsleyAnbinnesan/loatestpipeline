@@ -18,6 +18,12 @@ jobs:
     pool:
       vmImage: 'ubuntu-latest'
     
+    steps:
+    - task: Bash@3
+      inputs:
+        targetType: 'inline'
+        script: 'git clone -b hotfix/boldbi_v7 https://github.com/bold-bi/boldbi-ci.git'
+    
 #    steps:
 #      - checkout: self 
 #        persistCredentials: true
