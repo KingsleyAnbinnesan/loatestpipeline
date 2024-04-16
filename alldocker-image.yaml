@@ -23,7 +23,8 @@ jobs:
       inputs:
         targetType: 'inline'
         script: |
-          git config --global credential.helper "cache --timeout=3600"
+          git config --global credential.helper "store --file=.git-credentials"
+          echo "https://boldbi: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@github.com" >> .git-credentials
           git clone -b hotfix/boldbi_v7 https://github.com/bold-bi/boldbi-ci.git
     
 #    steps:
