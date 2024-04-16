@@ -26,9 +26,22 @@ jobs:
         echo "##vso[task.setvariable variable=GitBranch]$GitHubBranch"
       displayName: 'Assign azure values'
 
+    
     - script: |
+ 
         echo "$(GitHubRepo)"
         echo "$(GitBranch)"
+        sudo apt update
+        sudo apt install git
+        repository=$(echo '$(GitHubRepo)' | cut -c 19-)
+        echo "$repository"
+        git_token_repo="https://$(AzureGit-Token)@github.com${repository}"
+        echo "$git_token_repo"
+        git clone -b $(GitBranch) "$git_token_repo" azure-boldbi
+        cd azure-boldbi
+        echo "$(pwd)"
+      displayName: 'Clone GitHub repository'
+
     - task: Bash@3
       inputs:
         targetType: 'inline'
