@@ -18,12 +18,12 @@ jobs:
     pool:
       vmImage: 'ubuntu-latest'
     
-    steps:
-      - checkout: self # Checkout the repository where the pipeline YAML is located
-        persistCredentials: true # If needed
-        clean: true # Clean any existing code before checkout
+#    steps:
+#      - checkout: self 
+#        persistCredentials: true
+#        clean: true 
 
-      - checkout: git://bold-bi/boldbi-ci@hotfix/boldbi_v7 # Checkout the bold-bi repo within the same Azure DevOps organization
-        displayName: 'Checkout bold-bi repo'
-        persistCredentials: true # If needed
-        clean: true # Clean any existing code before checkout
+#      - checkout: git://bold-bi/boldbi-ci@hotfix/boldbi_v7
+#        displayName: 'Checkout bold-bi repo'
+#        persistCredentials: true
+#        clean: true
