@@ -22,7 +22,10 @@ jobs:
     - task: Bash@3
       inputs:
         targetType: 'inline'
-        script: 'git clone -b hotfix/boldbi_v7 https://github.com/bold-bi/boldbi-ci.git'
+        script: |
+          git config --global credential.helper "store --file=.git-credentials"
+          echo "https://github.com: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@github.com" >> .git-credentials
+          git clone -b hotfix/boldbi_v7 https://github.com/bold-bi/boldbi-ci.git
     
 #    steps:
 #      - checkout: self 
