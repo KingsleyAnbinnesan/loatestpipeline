@@ -19,15 +19,29 @@ jobs:
       vmImage: 'ubuntu-latest'
     
     steps:
+    - script: |
+        GitHubRepository="https://github.com/bold-bi/boldbi-ci.git"           
+        echo "##vso[task.setvariable variable=GitHubRepo]$GitHubRepository"
+        GitHubBranch="hotfix/boldbi_v7"
+        echo "##vso[task.setvariable variable=GitBranch]$GitHubBranch"
+      displayName: 'Assign azure values'
+
+    - script: |
+        echo "$(GitHubRepo)"
+        echo "$(GitBranch)"
     - task: Bash@3
       inputs:
         targetType: 'inline'
         script: |
           sudo apt update
           sudo apt install git
-          git config --global credential.helper "store --file=.git-credentials"
-          echo "https://KingsleyAnbinnesan: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@github.com" >> .git-credentials
-          git clone -b v6 https://github.com/KingsleyAnbinnesan/azure-arm-template.git
+          repository=$(echo '$(GitHubRepo)' | cut -c 19-)
+          echo "$repository"
+          git_token_repo="https://$(AzureGit-Token)@github.com${repository}"
+          echo "$git_token_repo"
+          git clone -b '$(GitBranch)' "$git_token_repo" azure-boldbi
+          cd azure-boldbi
+          echo "$(pwd)"
     
 #    steps:
 #      - checkout: self 
