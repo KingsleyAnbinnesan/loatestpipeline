@@ -53,7 +53,7 @@ jobs:
             IMAGE_TAG=$(echo "${{parameters.linux_package}}" | grep -oP 'Linux_\K[\d\.]+_\d{8}_\d{6}')
             
             echo "##vso[task.setvariable variable=TAG]$IMAGE_TAG"
-            echo "Find the Image Tag: $TAG"
+            echo "Find the Image Tag: $IMAGE_TAG"
             sudo mkdir -p /home/vsts/work/1/s/BoldBIEnterpriseEdition-Linux/application/idp/web/appdatafiles && echo "appdatafiles directory created"
             echo "appdatafiles directory created"
             appdatafilesDirectory=/home/vsts/work/1/s/BoldBIEnterpriseEdition-Linux/application/idp/web/appdatafiles
