@@ -6,8 +6,8 @@
 trigger:
   - none
 
-variables:
-  Path: "/home/vsts/work/1/s"
+#variables:
+ # Path: "/home/vsts/work/1/s"
 
 
 parameters:
