@@ -59,7 +59,7 @@ jobs:
             installutilsFolderSource=/home/vsts/work/1/s/BoldBIEnterpriseEdition-Linux/application/utilities/installutils
             installutilsFolderDestination=/home/vsts/work/1/s/BoldBIEnterpriseEdition-Linux/application/idp/web/appdatafiles/installutils
             sudo cp -r $installutilsFolderSource $installutilsFolderDestination && echo "installutils are moved into appdatafiles"
-            id_webFileSource=/home/vsts/work/1/s/boldbi-ci/installscripts/jenkins-ci/kubernetes/shell_scripts/id_web
+            id_webFileSource=/home/vsts/work/1/s/bolb/installscripts/jenkins-ci/kubernetes/shell_scripts/id_web
             id_webFileDestination=/home/vsts/work/1/s/BoldBIEnterpriseEdition-Linux/application/idp/web
             sudo cp -r $id_webFileSource $id_webFileDestination && echo "id_web moved"
         continueOnError: true
