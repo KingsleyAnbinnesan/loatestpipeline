@@ -19,12 +19,18 @@ jobs:
       vmImage: 'ubuntu-latest'
     
     steps:
-    - task: DownloadGitHubRelease@0
-      inputs:
-        connection: 'kubernetes-image-custom'
-        userRepository: 'bold-bi/boldbi-ci'
-        defaultVersionType: 'latest'
-        downloadPath: '$(System.ArtifactsDirectory)'
+
+      # Specify the secret variable containing your GitHub PAT
+      # By referencing $(GitHubPAT), which should be set in your Azure Pipelines project
+    
+#    - script: |
+#    - task: DownloadGitHubRelease@0
+#      inputs:
+#        connection: 'kubernetes-image-custom'
+#        userRepository: 'bold-bi/boldbi-ci'
+#        defaultVersionType: 'branch'
+#        branchName: 'hotfix/boldbi_v7'
+#        downloadPath: '$(System.ArtifactsDirectory)'
       
     - script: |
         GitHubRepository="https://github.com/bold-bi/boldbi-ci.git"           
@@ -43,7 +49,7 @@ jobs:
         sudo apt install git
         repository=$(echo '$(GitHubRepo)' | cut -c 19-)
         echo "$repository"
-        git_token_repo="https://$(AzureGitToken)@github.com${repository}"
+        git_token_repo="https://$(AzureGitName):$(AzureGitToken)@github.com${repository}"
         echo "$git_token_repo"
         git clone -b $(GitBranch) "$git_token_repo" azure-boldbi
         cd azure-boldbi
@@ -58,7 +64,7 @@ jobs:
           sudo apt install git
           repository=$(echo '$(GitHubRepo)' | cut -c 19-)
           echo "$repository"
-          git_token_repo="https://$(AzureGitToken)@github.com${repository}"
+          git_token_repo="https://$(AzureGitName):$(AzureGitToken)@github.com${repository}"
           echo "$git_token_repo"
           git clone -b '$(GitBranch)' "$git_token_repo" azure-boldbi
           cd azure-boldbi
