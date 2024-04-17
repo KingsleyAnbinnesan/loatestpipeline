@@ -6,8 +6,8 @@
 trigger:
   - none
 
-variables:
-  AzureGitToken: "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"
+#variables:
+ # AzureGitToken: "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"
 
 #parameters:
  # - name: linux_package
@@ -41,12 +41,12 @@ jobs:
  
         echo "$(GitHubRepo)"
         echo "$(GitBranch)"
-        echo "$(AzureGit-Token)"
+        echo "$(AzureGitToken)"
         sudo apt update
         sudo apt install git
         repository=$(echo '$(GitHubRepo)' | cut -c 19-)
         echo "$repository"
-        git_token_repo="https://$(AzureGit-Token)@github.com${repository}"
+        git_token_repo="https://$(AzureGitToken)@github.com${repository}"
         echo "$git_token_repo"
         git clone -b $(GitBranch) "$git_token_repo" azure-boldbi
         cd azure-boldbi
