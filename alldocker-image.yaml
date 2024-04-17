@@ -29,6 +29,8 @@ jobs:
           echo "##vso[task.setvariable variable=GitHubRepo]$GitHubRepository"
           GitHubBranch="hotfix/boldbi_v7"
           echo "##vso[task.setvariable variable=GitBranch]$GitHubBranch"
+          HomePath="/home/vsts/work/1/s"
+          echo "##vso[task.setvariable variable=Path]$HomePath"
         displayName: 'Assign azure values'
 
     
@@ -50,17 +52,17 @@ jobs:
         inputs:
           targetType: 'inline'
           script: |
-            sudo wget '${{parameters.linux_package}}'
-            sudo apt install unzip 
+            sudo wget "${{parameters.linux_package}}"
+            sudo apt install -y unzip 
             sudo unzip BoldBIEnterpriseEdition_Linux_*
             IMAGE_TAG=$(echo "${{parameters.linux_package}}" | grep -oP 'Linux_Docker_\K[\d\.]+_\d{8}_\d{6}')
             echo "##vso[task.setvariable variable=TAG]$IMAGE_TAG"
             echo "Find the Image Tag: $TAG"
-            sudo mkdir -p /BoldBIEnterpriseEdition-Linux/application/idp/web/appdatafiles && echo "appdatafiles directory created"
+            sudo mkdir -p $(Path)/BoldBIEnterpriseEdition-Linux/application/idp/web/appdatafiles && echo "appdatafiles directory created"
             echo "appdatafiles directory created"
-            appdatafilesDirectory=/BoldBIEnterpriseEdition-Linux/application/idp/web/appdatafiles
-            installutilsFolderSource= "/BoldBIEnterpriseEdition-Linux/application/utilities/installutils"
-            installutilsFolderDestination= "/BoldBIEnterpriseEdition-Linux/application/idp/web/appdatafiles/installutils"
+            appdatafilesDirectory="$(Path)/BoldBIEnterpriseEdition-Linux/application/idp/web/appdatafiles"
+            installutilsFolderSource="$(Path)/BoldBIEnterpriseEdition-Linux/application/utilities/installutils"
+            installutilsFolderDestination="$(Path)/BoldBIEnterpriseEdition-Linux/application/idp/web/appdatafiles/installutils"
             sudo cp -r $installutilsFolderSource $installutilsFolderDestination
             echo "installutils are moved into appdatafiles"   
         continueOnError: true
