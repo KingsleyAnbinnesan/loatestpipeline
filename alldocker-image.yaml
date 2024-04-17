@@ -84,17 +84,15 @@ jobs:
                 # Construct source and destination paths for copying
                 copyMultipleDockerSourceFile="${sourceDir}${MultipleDockerFile}"
                 copyMultipleDockerDestinationFile="${destinationDir}"
-                # Create destination directory if it doesn't exist
-                mkdir -p "$copyMultipleDockerDestinationFile"
                 # Copy Dockerfile
-                cp "$copyMultipleDockerSourceFile" "$copyMultipleDockerDestinationFile"
+                sudo cp "$copyMultipleDockerSourceFile" "$copyMultipleDockerDestinationFile"
                 echo "Copied $copyMultipleDockerSourceFile to $copyMultipleDockerDestinationFile"
                 # Construct source and destination paths for moving
                 moveMultipleDockerSourceFile="${destinationDir}${MultipleDockerFile}"
                 kubernetesFile="${kubernetesImageName}.Dockerfile"
                 moveMultipleDockerDestinationFile="${destinationDir}${kubernetesFile}"
                 # Move Dockerfile with new filename
-                mv "$moveMultipleDockerSourceFile" "$moveMultipleDockerDestinationFile"
+                sudo mv "$moveMultipleDockerSourceFile" "$moveMultipleDockerDestinationFile"
                 echo "Moved $moveMultipleDockerSourceFile to $moveMultipleDockerDestinationFile"
             done
         continueOnError: true
