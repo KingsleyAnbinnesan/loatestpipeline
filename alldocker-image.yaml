@@ -6,10 +6,14 @@
 trigger:
   - none
 
-#parameters:
- # - name: linux_package
-  #  displayName: LinuxPackage
-   # type: string
+variables:
+  Path: "/home/vsts/work/1/s"
+
+
+parameters:
+  - name: linux_package
+    displayName: LinuxPackage
+    type: string
 
 jobs:
   - job: KubernetesImagecreation
@@ -20,62 +24,46 @@ jobs:
     
     steps:
 
-      # Specify the secret variable containing your GitHub PAT
-      # By referencing $(GitHubPAT), which should be set in your Azure Pipelines project
-    
-#    - script: |
-#    - task: DownloadGitHubRelease@0
-#      inputs:
-#        connection: 'kubernetes-image-custom'
-#        userRepository: 'bold-bi/boldbi-ci'
-#        defaultVersionType: 'branch'
-#        branchName: 'hotfix/boldbi_v7'
-#        downloadPath: '$(System.ArtifactsDirectory)'
-      
-    - script: |
-        GitHubRepository="https://github.com/bold-bi/boldbi-ci.git"           
-        echo "##vso[task.setvariable variable=GitHubRepo]$GitHubRepository"
-        GitHubBranch="hotfix/boldbi_v7"
-        echo "##vso[task.setvariable variable=GitBranch]$GitHubBranch"
-      displayName: 'Assign azure values'
+      - script: |
+          GitHubRepository="https://github.com/bold-bi/boldbi-ci.git"           
+          echo "##vso[task.setvariable variable=GitHubRepo]$GitHubRepository"
+          GitHubBranch="hotfix/boldbi_v7"
+          echo "##vso[task.setvariable variable=GitBranch]$GitHubBranch"
+        displayName: 'Assign azure values'
 
     
-    - script: |
- 
-        echo "$(GitHubRepo)"
-        echo "$(GitBranch)"
-        echo "$(AzureGitToken)"
-        sudo apt update
-        sudo apt install git
-        repository=$(echo '$(GitHubRepo)' | cut -c 19-)
-        echo "$repository"
-        git_token_repo="https://$(AzureGitName):$(AzureGitToken)@github.com${repository}"
-        echo "$git_token_repo"
-        git clone -b $(GitBranch) "$git_token_repo" azure-boldbi
-        cd azure-boldbi
-        echo "$(pwd)"
-      displayName: 'Clone GitHub repository'
-
-    - task: Bash@3
-      inputs:
-        targetType: 'inline'
-        script: |
+      - script: |
+          echo "$(GitHubRepo)"
+          echo "$(GitBranch)"
+          echo "$(AzureGitToken)"
           sudo apt update
           sudo apt install git
           repository=$(echo '$(GitHubRepo)' | cut -c 19-)
           echo "$repository"
           git_token_repo="https://$(AzureGitName):$(AzureGitToken)@github.com${repository}"
           echo "$git_token_repo"
-          git clone -b '$(GitBranch)' "$git_token_repo" azure-boldbi
-          cd azure-boldbi
+          git clone -b $(GitBranch) "$git_token_repo"
           echo "$(pwd)"
+        displayName: 'Clone GitHub repository'
     
-#    steps:
-#      - checkout: self 
-#        persistCredentials: true
-#        clean: true 
-
-#      - checkout: git://bold-bi/boldbi-ci@hotfix/boldbi_v7
-#        displayName: 'Checkout bold-bi repo'
-#        persistCredentials: true
-#        clean: true
+      - task: Bash@3
+        inputs:
+          targetType: 'inline'
+          script: |
+            sudo wget '${{parameters.linux_package}}'
+            sudo apt install unzip 
+            sudo unzip BoldBIEnterpriseEdition_Linux_*
+            IMAGE_TAG=$(echo "${{parameters.linux_package}}" | grep -oP 'Linux_Docker_\K[\d\.]+_\d{8}_\d{6}')
+            echo "##vso[task.setvariable variable=TAG]$IMAGE_TAG"
+            echo "Find the Image Tag: $IMAGE_TAG"      
+        continueOnError: true
+      
+      - script: |
+          mkdir -p $(Path)/BoldBIEnterpriseEdition-Linux/application/idp/web/appdatafiles
+          echo "appdatafiles directory created"
+          appdatafilesDirectory=$(Path)/BoldBIEnterpriseEdition-Linux/application/idp/web/appdatafiles
+          installutilsFolderSource=$(Path)/BoldBIEnterpriseEdition-Linux/application/utilities/installutils
+          installutilsFolderDestination=$(Path)/BoldBIEnterpriseEdition-Linux/application/idp/web/appdatafiles/installutils
+          cp -r $installutilsFolderSource $installutilsFolderDestination
+          echo "installutils are moved into appdatafiles"
+        displayName: 'Create appdatafiles directory and copy installutils folder'
