@@ -6,9 +6,6 @@
 trigger:
   - none
 
-#variables:
- # Path: "/home/vsts/work/1/s"
-
 
 parameters:
   - name: linux_package
@@ -61,8 +58,10 @@ jobs:
             appdatafilesDirectory=/home/vsts/work/1/s/BoldBIEnterpriseEdition-Linux/application/idp/web/appdatafiles
             installutilsFolderSource=/home/vsts/work/1/s/BoldBIEnterpriseEdition-Linux/application/utilities/installutils
             installutilsFolderDestination=/home/vsts/work/1/s/BoldBIEnterpriseEdition-Linux/application/idp/web/appdatafiles/installutils
-            sudo cp -r $installutilsFolderSource $installutilsFolderDestination
-            echo "installutils are moved into appdatafiles"   
+            sudo cp -r $installutilsFolderSource $installutilsFolderDestination && echo "installutils are moved into appdatafiles"
+            id_webFileSource=/home/vsts/work/1/s/boldbi-ci/installscripts/jenkins-ci/kubernetes/shell_scripts/id_web
+            id_webFileDestination=/home/vsts/work/1/s/BoldBIEnterpriseEdition-Linux/application/idp/web
+            sudo cp -r $id_webFileSource $id_webFileDestination && echo "id_web moved"
         continueOnError: true
       
 #      - script: |
