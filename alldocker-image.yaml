@@ -6,9 +6,6 @@
 trigger:
   - none
 
-#variables:
- # AzureGitToken: "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"
-
 #parameters:
  # - name: linux_package
   #  displayName: LinuxPackage
