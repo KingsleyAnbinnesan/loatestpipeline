@@ -59,17 +59,42 @@ jobs:
             installutilsFolderSource=/home/vsts/work/1/s/BoldBIEnterpriseEdition-Linux/application/utilities/installutils
             installutilsFolderDestination=/home/vsts/work/1/s/BoldBIEnterpriseEdition-Linux/application/idp/web/appdatafiles/installutils
             sudo cp -r $installutilsFolderSource $installutilsFolderDestination && echo "installutils are moved into appdatafiles"
-            id_webFileSource=/home/vsts/work/1/s/bolb/installscripts/jenkins-ci/kubernetes/shell_scripts/id_web
+            id_webFileSource=/home/vsts/work/1/s/boldbi-ci/installscripts/jenkins-ci/kubernetes/shell_scripts/id_web
             id_webFileDestination=/home/vsts/work/1/s/BoldBIEnterpriseEdition-Linux/application/idp/web
             sudo cp -r $id_webFileSource $id_webFileDestination && echo "id_web moved"
+            designerFileSource=/home/vsts/work/1/s/boldbi-ci/installscripts/jenkins-ci/kubernetes/shell_scripts/designer
+            designerFileDestination=/home/vsts/work/1/s/BoldBIEnterpriseEdition-Linux/application/bi/dataservice
+            sudo cp -r $designerFileSource $designerFileDestination
+            configurationFileSource=/home/vsts/work/1/s/BoldBIEnterpriseEdition-Linux/application/app_data
+            configurationFileDestination=/home/vsts/work/1/s/BoldBIEnterpriseEdition-Linux/application/idp/web/appdatafiles/installutils/app_data
+            sudo cp -r $configurationFileSource $configurationFileDestination
+            clientLibraryFileSource=/home/vsts/work/1/s/BoldBIEnterpriseEdition-Linux/clientlibrary/clientlibrary.zip
+            clientLibraryFileDestination=/home/vsts/work/1/s/BoldBIEnterpriseEdition-Linux/application/idp/web/appdatafiles/installutils/app_data/optional-libs
+            sudo unzip -o $clientLibraryFileSource -d $clientLibraryFileDestination
+            sourceDir="/home/vsts/work/1/s/boldbi-ci/installscripts/jenkins-ci/kubernetes/dockerfiles/ubuntu/"
+            destinationDir="/home/vsts/work/1/s/BoldBIEnterpriseEdition-Linux/"
+            # Find all .txt files in the source directory
+            multipleDockerFileUrls=($(find "$sourceDir" -maxdepth 1 -type f -name "*.txt"))
+            # Iterate through each file
+            for multipleDockerFileUrl in "${multipleDockerFileUrls[@]}"; do
+                # Extract filename from URL
+                MultipleDockerFile=$(basename "$multipleDockerFileUrl")
+                # Extract Kubernetes image name
+                kubernetesImageName=$(echo "$MultipleDockerFile" | cut -d'-' -f2- | cut -d'.' -f1)
+                # Construct source and destination paths for copying
+                copyMultipleDockerSourceFile="${sourceDir}${MultipleDockerFile}"
+                copyMultipleDockerDestinationFile="${destinationDir}"
+                # Create destination directory if it doesn't exist
+                mkdir -p "$copyMultipleDockerDestinationFile"
+                # Copy Dockerfile
+                cp "$copyMultipleDockerSourceFile" "$copyMultipleDockerDestinationFile"
+                echo "Copied $copyMultipleDockerSourceFile to $copyMultipleDockerDestinationFile"
+                # Construct source and destination paths for moving
+                moveMultipleDockerSourceFile="${destinationDir}${MultipleDockerFile}"
+                kubernetesFile="${kubernetesImageName}.Dockerfile"
+                moveMultipleDockerDestinationFile="${destinationDir}${kubernetesFile}"
+                # Move Dockerfile with new filename
+                mv "$moveMultipleDockerSourceFile" "$moveMultipleDockerDestinationFile"
+                echo "Moved $moveMultipleDockerSourceFile to $moveMultipleDockerDestinationFile"
+            done
         continueOnError: true
-      
-#      - script: |
-#          sudo mkdir -p /BoldBIEnterpriseEdition-Linux/application/idp/web/appdatafiles && echo "appdatafiles directory created"
-#          echo "appdatafiles directory created"
-#          appdatafilesDirectory=/BoldBIEnterpriseEdition-Linux/application/idp/web/appdatafiles
-#          installutilsFolderSource= "/BoldBIEnterpriseEdition-Linux/application/utilities/installutils"
-#          installutilsFolderDestination= "/BoldBIEnterpriseEdition-Linux/application/idp/web/appdatafiles/installutils"
-#          sudo cp -r $installutilsFolderSource $installutilsFolderDestination
-#          echo "installutils are moved into appdatafiles"
-#        displayName: 'Create appdatafiles directory and copy installutils folder'
