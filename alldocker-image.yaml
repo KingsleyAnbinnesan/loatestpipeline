@@ -22,12 +22,12 @@ jobs:
       vmImage: 'ubuntu-latest'
     
     steps:
-    - task: DownloadGitHubRelease@0
-      inputs:
-        connection: 'kubernetes-image-custom'
-        userRepository: 'bold-bi/boldbi-ci'
-        defaultVersionType: 'latest'
-        downloadPath: '$(System.ArtifactsDirectory)'
+#    - task: DownloadGitHubRelease@0
+#      inputs:
+#        connection: 'kubernetes-image-custom'
+#        userRepository: 'bold-bi/boldbi-ci'
+#        defaultVersionType: 'latest'
+#        downloadPath: '$(System.ArtifactsDirectory)'
       
     - script: |
         GitHubRepository="https://github.com/bold-bi/boldbi-ci.git"           
@@ -41,6 +41,7 @@ jobs:
  
         echo "$(GitHubRepo)"
         echo "$(GitBranch)"
+        echo "$(AzureGit-Token)"
         sudo apt update
         sudo apt install git
         repository=$(echo '$(GitHubRepo)' | cut -c 19-)
