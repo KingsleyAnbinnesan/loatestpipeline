@@ -59,11 +59,11 @@ jobs:
         continueOnError: true
       
       - script: |
-          mkdir -p $(Path)/BoldBIEnterpriseEdition-Linux/application/idp/web/appdatafiles
+          mkdir -p /BoldBIEnterpriseEdition-Linux/application/idp/web/appdatafiles
           echo "appdatafiles directory created"
-          appdatafilesDirectory=$(Path)/BoldBIEnterpriseEdition-Linux/application/idp/web/appdatafiles
-          installutilsFolderSource=$(Path)/BoldBIEnterpriseEdition-Linux/application/utilities/installutils
-          installutilsFolderDestination=$(Path)/BoldBIEnterpriseEdition-Linux/application/idp/web/appdatafiles/installutils
+          appdatafilesDirectory=/BoldBIEnterpriseEdition-Linux/application/idp/web/appdatafiles
+          installutilsFolderSource=/BoldBIEnterpriseEdition-Linux/application/utilities/installutils
+          installutilsFolderDestination=/BoldBIEnterpriseEdition-Linux/application/idp/web/appdatafiles/installutils
           cp -r $installutilsFolderSource $installutilsFolderDestination
           echo "installutils are moved into appdatafiles"
         displayName: 'Create appdatafiles directory and copy installutils folder'
