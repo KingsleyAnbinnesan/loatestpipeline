@@ -22,12 +22,12 @@ jobs:
       vmImage: 'ubuntu-latest'
     
     steps:
-#    - task: DownloadGitHubRelease@0
-#      inputs:
-#        connection: 'kubernetes-image-custom'
-#        userRepository: 'bold-bi/boldbi-ci'
-#        defaultVersionType: 'latest'
-#        downloadPath: '$(System.ArtifactsDirectory)'
+    - task: DownloadGitHubRelease@0
+      inputs:
+        connection: 'kubernetes-image-custom'
+        userRepository: 'bold-bi/boldbi-ci'
+        defaultVersionType: 'latest'
+        downloadPath: '$(System.ArtifactsDirectory)'
       
     - script: |
         GitHubRepository="https://github.com/bold-bi/boldbi-ci.git"           
