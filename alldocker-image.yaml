@@ -6,9 +6,6 @@
 trigger:
   - none
 
-variables:
-  path: "/home/vsts/work/1/s"
-
 
 parameters:
   - name: linux_package
@@ -21,6 +18,9 @@ jobs:
     timeoutInMinutes: 0
     pool:
       vmImage: 'ubuntu-latest'
+
+    variables:
+      path: "/home/vsts/work/1/s"  
     
     steps:
 
