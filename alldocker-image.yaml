@@ -55,14 +55,18 @@ jobs:
             echo "##vso[task.setvariable variable=TAG]$IMAGE_TAG"
             echo "Find the Image Tag: $IMAGE_TAG"
             sudo mkdir -p /home/vsts/work/1/s/BoldBIEnterpriseEdition-Linux/application/idp/web/appdatafiles && echo "appdatafiles directory created"
-            echo "appdatafiles directory created"
             appdatafilesDirectory=/home/vsts/work/1/s/BoldBIEnterpriseEdition-Linux/application/idp/web/appdatafiles
+
             installutilsFolderSource=/home/vsts/work/1/s/BoldBIEnterpriseEdition-Linux/application/utilities/installutils
             installutilsFolderDestination=/home/vsts/work/1/s/BoldBIEnterpriseEdition-Linux/application/idp/web/appdatafiles/installutils
             sudo cp -r $installutilsFolderSource $installutilsFolderDestination && echo "installutils are moved into appdatafiles"
+            
             id_webFileSource=/home/vsts/work/1/s/boldbi-ci/installscripts/jenkins-ci/kubernetes/shell_scripts/id_web
             id_webFileDestination=/home/vsts/work/1/s/BoldBIEnterpriseEdition-Linux/application/idp/web
             sudo cp -r $id_webFileSource $id_webFileDestination && echo "id_web moved"
+            ls $id_webFileSource
+            ls $id_webFileDestination
+            
             designerFileSource=/home/vsts/work/1/s/boldbi-ci/installscripts/jenkins-ci/kubernetes/shell_scripts/designer
             designerFileDestination=/home/vsts/work/1/s/BoldBIEnterpriseEdition-Linux/application/bi/dataservice
             sudo cp -r $designerFileSource $designerFileDestination
