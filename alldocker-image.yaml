@@ -54,9 +54,9 @@ jobs:
             sudo apt install -y unzip 
             sudo unzip BoldBIEnterpriseEdition_Linux_*
             IMAGE_TAG=$(echo "${{parameters.linux_package}}" | grep -oP 'Linux_\K[\d\.]+_\d{8}_\d{6}')
-            
             echo "##vso[task.setvariable variable=TAG]$IMAGE_TAG"
             echo "Find the Image Tag: $IMAGE_TAG"
+
             sudo mkdir -p $(HomeDirectory)/BoldBIEnterpriseEdition-Linux/application/idp/web/appdatafiles && echo "appdatafiles directory created"
             appdatafilesDirectory=$(HomeDirectory)/BoldBIEnterpriseEdition-Linux/application/idp/web/appdatafiles
 
@@ -65,17 +65,17 @@ jobs:
             sudo cp -r $installutilsFolderSource $installutilsFolderDestination && echo "installutils are moved into appdatafiles"
             ls $installutilsFolderDestination
 
-            id_webFileSource=$(HomeDirectory)/boldbi-ci/installscripts/jenkins-ci/kubernetes/shell_scripts/id_web/
-            id_webFileDestination=$(HomeDirectory)/BoldBIEnterpriseEdition-Linux/application/idp/web
+            id_webFileSource=$(HomeDirectory)/boldbi-ci/installscripts/jenkins-ci/kubernetes/shell_scripts/id_web/*
+            id_webFileDestination=$(HomeDirectory)/BoldBIEnterpriseEdition-Linux/application/idp/web/
             sudo cp -r $id_webFileSource $id_webFileDestination && echo "entrypoint.sh moved properly"
             ls $id_webFileSource
             ls $id_webFileDestination
             
-            designerFileSource=$(HomeDirectory)/boldbi-ci/installscripts/jenkins-ci/kubernetes/shell_scripts/designer/
+            designerFileSource=$(HomeDirectory)/boldbi-ci/installscripts/jenkins-ci/kubernetes/shell_scripts/designer/*
             designerFileDestination=$(HomeDirectory)/BoldBIEnterpriseEdition-Linux/application/bi/dataservice
             sudo cp -r $designerFileSource $designerFileDestination && echo "designer files are moved"
 
-            configurationFileSource=$(HomeDirectory)/BoldBIEnterpriseEdition-Linux/application/app_data/
+            configurationFileSource=$(HomeDirectory)/BoldBIEnterpriseEdition-Linux/application/app_data/*
             configurationFileDestination=$(HomeDirectory)/BoldBIEnterpriseEdition-Linux/application/idp/web/appdatafiles/installutils/app_data
             sudo cp -r $configurationFileSource $configurationFileDestination && echo "app_data files are moved"
             ls $configurationFileSource
@@ -84,6 +84,7 @@ jobs:
             clientLibraryFileSource=$(HomeDirectory)/BoldBIEnterpriseEdition-Linux/clientlibrary/clientlibrary.zip
             clientLibraryFileDestination=$(HomeDirectory)/BoldBIEnterpriseEdition-Linux/application/idp/web/appdatafiles/installutils/app_data/optional-libs
             sudo unzip -o $clientLibraryFileSource -d $clientLibraryFileDestination
+            ls $clientLibraryFileDestination
 
             sourceDir="$(HomeDirectory)/boldbi-ci/installscripts/jenkins-ci/kubernetes/dockerfiles/ubuntu/"
             destinationDir="$(HomeDirectory)/BoldBIEnterpriseEdition-Linux"
@@ -109,4 +110,5 @@ jobs:
                 sudo mv "$moveMultipleDockerSourceFile" "$moveMultipleDockerDestinationFile"
                 echo "Moved $moveMultipleDockerSourceFile to $moveMultipleDockerDestinationFile"
             done
+            ls $destinationDir
         continueOnError: true
