@@ -33,9 +33,6 @@ jobs:
 
     
       - script: |
-          export PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin" # Add directory containing bash to PATH
-          sudo apt update
-          sudo apt install -y git
           echo "$(GitHubRepo)"
           echo "$(GitBranch)"
           echo "$(AzureGitToken)"
