@@ -6,6 +6,9 @@
 trigger:
   - none
 
+variables:
+  path: "/home/vsts/work/1/s"
+
 
 parameters:
   - name: linux_package
@@ -30,11 +33,11 @@ jobs:
 
     
       - script: |
+          sudo apt update
+          sudo apt install -y bash git
           echo "$(GitHubRepo)"
           echo "$(GitBranch)"
           echo "$(AzureGitToken)"
-          sudo apt update
-          sudo apt install git
           repository=$(echo '$(GitHubRepo)' | cut -c 19-)
           echo "$repository"
           git_token_repo="https://$(AzureGitName):$(AzureGitToken)@github.com${repository}"
@@ -61,7 +64,7 @@ jobs:
             installutilsFolderDestination=/home/vsts/work/1/s/BoldBIEnterpriseEdition-Linux/application/idp/web/appdatafiles/installutils
             sudo cp -r $installutilsFolderSource $installutilsFolderDestination && echo "installutils are moved into appdatafiles"
             
-            id_webFileSource=/home/vsts/work/1/s/boldbi-ci/installscripts/jenkins-ci/kubernetes/shell_scripts/id_web
+            id_webFileSource=/home/vsts/work/1/s/boldbi-ci/installscripts/jenkins-ci/kubernetes/shell_scripts/id_web/
             id_webFileDestination=/home/vsts/work/1/s/BoldBIEnterpriseEdition-Linux/application/idp/web
             sudo cp -r $id_webFileSource $id_webFileDestination && echo "id_web moved"
             ls $id_webFileSource
