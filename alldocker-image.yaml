@@ -20,7 +20,7 @@ jobs:
       vmImage: 'ubuntu-latest'
 
     variables:
-      path: "/home/vsts/work/1/s"  
+      homedir: "/home/vsts/work/1/s"  
     
     steps:
 
