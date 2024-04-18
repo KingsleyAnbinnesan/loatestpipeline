@@ -68,7 +68,6 @@ jobs:
             id_webFileSource=$(HomeDirectory)/boldbi-ci/installscripts/jenkins-ci/kubernetes/shell_scripts/id_web/*
             id_webFileDestination=$(HomeDirectory)/BoldBIEnterpriseEdition-Linux/application/idp/web/
             sudo cp -r $id_webFileSource $id_webFileDestination && echo "entrypoint.sh moved properly"
-            ls $id_webFileSource
             ls $id_webFileDestination
             
             designerFileSource=$(HomeDirectory)/boldbi-ci/installscripts/jenkins-ci/kubernetes/shell_scripts/designer/*
