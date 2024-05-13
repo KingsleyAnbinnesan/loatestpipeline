@@ -25,44 +25,68 @@ jobs:
       vmImage: 'ubuntu-latest'
 
     steps:
-      - ${{ if ne(parameters.custom_docker_dev_image_tag, '') }}:
-        - task: Docker@2
-          inputs:
-            containerRegistry: 'Pull_image_from_development'
-            command: 'login'
+      - task: Docker@2
+        inputs:
+          containerRegistry: 'Pull_image_from_development'
+          command: 'login'
+
+      - ${{ if eq(parameters.environment, 'Single Container') }}:
         - task: Bash@3
           inputs:
             targetType: 'inline'
             script: |
-              docker pull us-central1-docker.pkg.dev/boldbi-dev-296107/boldbi/boldbi-docker:'${{parameters.custom_docker_dev_image_tag}}'
-              docker tag us-central1-docker.pkg.dev/boldbi-dev-296107/boldbi/boldbi-docker:'${{parameters.custom_docker_dev_image_tag}}' kingsleywills/scanning:'${{parameters.custom_docker_prod_image_tag}}'
+              docker pull us-central1-docker.pkg.dev/boldbi-dev-296107/boldbi/boldbi-docker:'${{parameters.custom_dev_image_tag}}'
+              docker tag us-central1-docker.pkg.dev/boldbi-dev-296107/boldbi/boldbi-docker:'${{parameters.custom_dev_image_tag}}' kingsleywills/scanning:'${{parameters.custom_prod_image_tag}}'
 
         - task: Docker@2
           inputs:
             containerRegistry: 'dockerhub-kingsley'
             repository: 'kingsleywills/scanning'
             command: 'push'
-            tags: '${{parameters.custom_docker_prod_image_tag}}'
+            tags: '${{parameters.custom_prod_image_tag}}'
           displayName: Docker push Image to Production
           continueOnError: true
 
-      - ${{ if ne(parameters.custom_k8s_dev_image_tag, '') }}:
-        - task: Docker@2
-          inputs:
-            containerRegistry: 'Pull_image_from_development'
-            command: 'login'
+      - ${{ if eq(parameters.environment, 'Multi Container') }}:
         - task: Bash@3
           inputs:
             targetType: 'inline'
             script: |
-              docker pull us-central1-docker.pkg.dev/boldbi-dev-296107/boldbi/bold-identity:'${{parameters.custom_k8s_dev_image_tag}}'
-              docker tag us-central1-docker.pkg.dev/boldbi-dev-296107/boldbi/bold-identity:'${{parameters.custom_k8s_dev_image_tag}}' kingsleywills/scanning:'${{parameters.custom_k8s_prod_image_tag}}'
-
+              docker pull us-central1-docker.pkg.dev/boldbi-dev-296107/boldbi/bold-identity:'${{parameters.custom_dev_image_tag}}'
+              docker tag us-central1-docker.pkg.dev/boldbi-dev-296107/boldbi/bold-identity:'${{parameters.custom_dev_image_tag}}' kingsleywills/scanning:'${{parameters.custom_prod_image_tag}}'
         - task: Docker@2
           inputs:
             containerRegistry: 'dockerhub-kingsley'
             repository: 'kingsleywills/scanning'
             command: 'push'
-            tags: '${{parameters.custom_k8s_prod_image_tag}}'
+            tags: '${{parameters.custom_prod_image_tag}}'
           displayName: K8s push Image to Production
           continueOnError: true
+        - task: Bash@3
+          inputs:
+            targetType: 'inline'
+            script: |
+              docker pull us-central1-docker.pkg.dev/boldbi-dev-296107/boldbi/bold-identity-api:'${{parameters.custom_dev_image_tag}}'
+              docker tag us-central1-docker.pkg.dev/boldbi-dev-296107/boldbi/bold-identity-api:'${{parameters.custom_dev_image_tag}}' kingsleywills/scanning:'${{parameters.custom_prod_image_tag}}'
+        - task: Docker@2
+          inputs:
+            containerRegistry: 'dockerhub-kingsley'
+            repository: 'kingsleywills/scanning'
+            command: 'push'
+            tags: '${{parameters.custom_prod_image_tag}}'
+          displayName: K8s push Image to Production
+          continueOnError: true
+        - task: Bash@3
+          inputs:
+            targetType: 'inline'
+            script: |
+              docker pull us-central1-docker.pkg.dev/boldbi-dev-296107/boldbi/bold-ums:'${{parameters.custom_dev_image_tag}}'
+              docker tag us-central1-docker.pkg.dev/boldbi-dev-296107/boldbi/bold-ums:'${{parameters.custom_dev_image_tag}}' kingsleywills/scanning:'${{parameters.custom_prod_image_tag}}'
+        - task: Docker@2
+          inputs:
+            containerRegistry: 'dockerhub-kingsley'
+            repository: 'kingsleywills/scanning'
+            command: 'push'
+            tags: '${{parameters.custom_prod_image_tag}}'
+          displayName: K8s push Image to Production
+          continueOnError: true  
