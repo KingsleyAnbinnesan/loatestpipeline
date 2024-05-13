@@ -89,4 +89,76 @@ jobs:
             command: 'push'
             tags: '${{parameters.custom_prod_image_tag}}'
           displayName: K8s push Image to Production
-          continueOnError: true  
+          continueOnError: true
+        - task: Bash@3
+          inputs:
+            targetType: 'inline'
+            script: |
+              docker pull us-central1-docker.pkg.dev/boldbi-dev-296107/boldbi/boldbi-designer:'${{parameters.custom_dev_image_tag}}'
+              docker tag us-central1-docker.pkg.dev/boldbi-dev-296107/boldbi/boldbi-designer:'${{parameters.custom_dev_image_tag}}' kingsleywills/bold-identity:'${{parameters.custom_prod_image_tag}}'
+        - task: Docker@2
+          inputs:
+            containerRegistry: 'dockerhub-kingsley'
+            repository: 'kingsleywills/bold-identity'
+            command: 'push'
+            tags: '${{parameters.custom_prod_image_tag}}'
+          displayName: K8s push Image to Production
+          continueOnError: true
+        - task: Bash@3
+          inputs:
+            targetType: 'inline'
+            script: |
+              docker pull us-central1-docker.pkg.dev/boldbi-dev-296107/boldbi/bold-etl:'${{parameters.custom_dev_image_tag}}'
+              docker tag us-central1-docker.pkg.dev/boldbi-dev-296107/boldbi/bold-etl:'${{parameters.custom_dev_image_tag}}' kingsleywills/bold-identity-api:'${{parameters.custom_prod_image_tag}}'
+        - task: Docker@2
+          inputs:
+            containerRegistry: 'dockerhub-kingsley'
+            repository: 'kingsleywills/bold-identity-api'
+            command: 'push'
+            tags: '${{parameters.custom_prod_image_tag}}'
+          displayName: K8s push Image to Production
+          continueOnError: true
+        - task: Bash@3
+          inputs:
+            targetType: 'inline'
+            script: |
+              docker pull us-central1-docker.pkg.dev/boldbi-dev-296107/boldbi/boldbi-server-api:'${{parameters.custom_dev_image_tag}}'
+              docker tag us-central1-docker.pkg.dev/boldbi-dev-296107/boldbi/boldbi-server-api:'${{parameters.custom_dev_image_tag}}' kingsleywills/bold-ums:'${{parameters.custom_prod_image_tag}}'
+        - task: Docker@2
+          inputs:
+            containerRegistry: 'dockerhub-kingsley'
+            repository: 'kingsleywills/bold-ums'
+            command: 'push'
+            tags: '${{parameters.custom_prod_image_tag}}'
+          displayName: K8s push Image to Production
+          continueOnError: true
+
+        - task: Bash@3
+          inputs:
+            targetType: 'inline'
+            script: |
+              docker pull us-central1-docker.pkg.dev/boldbi-dev-296107/boldbi/boldbi-server-jobs:'${{parameters.custom_dev_image_tag}}'
+              docker tag us-central1-docker.pkg.dev/boldbi-dev-296107/boldbi/boldbi-server-jobs:'${{parameters.custom_dev_image_tag}}' kingsleywills/bold-identity-api:'${{parameters.custom_prod_image_tag}}'
+        - task: Docker@2
+          inputs:
+            containerRegistry: 'dockerhub-kingsley'
+            repository: 'kingsleywills/bold-identity-api'
+            command: 'push'
+            tags: '${{parameters.custom_prod_image_tag}}'
+          displayName: K8s push Image to Production
+          continueOnError: true
+        
+        - task: Bash@3
+          inputs:
+            targetType: 'inline'
+            script: |
+              docker pull us-central1-docker.pkg.dev/boldbi-dev-296107/boldbi/boldbi-server:'${{parameters.custom_dev_image_tag}}'
+              docker tag us-central1-docker.pkg.dev/boldbi-dev-296107/boldbi/boldbi-server:'${{parameters.custom_dev_image_tag}}' kingsleywills/bold-identity-api:'${{parameters.custom_prod_image_tag}}'
+        - task: Docker@2
+          inputs:
+            containerRegistry: 'dockerhub-kingsley'
+            repository: 'kingsleywills/bold-identity-api'
+            command: 'push'
+            tags: '${{parameters.custom_prod_image_tag}}'
+          displayName: K8s push Image to Production
+          continueOnError: true
