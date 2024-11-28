@@ -5,7 +5,7 @@ parameters:
   - name: domainURL
     displayName: domainURL
     type: string
-    default: "https://loadtest.bold.com"  # Optional default value
+    default: "http://135.237.138.102:80"  # Optional default value
  
 pool:
   vmImage: 'windows-latest'  # Replace with a self-hosted pool if needed
@@ -21,7 +21,7 @@ steps:
         
         # Wait for the site to load and simulate registration for 60 seconds
         Write-Host "Waiting for 60 seconds to simulate registration page hosting..."
-        Start-Sleep -Seconds 60
+        Start-Sleep -Seconds 300
 
         # Simulate stopping at the 'Go to Dashboard Page'
         Write-Host "Closing the browser to stop at the 'Go to Dashboard Page'"
