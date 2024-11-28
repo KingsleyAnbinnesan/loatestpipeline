@@ -1,48 +1,28 @@
 trigger:
   - none
+ 
+parameters:
+  - name: domainURL
+    displayName: domainURL
+    type: string
+    default: "https://loadtest.bold.com"  # Optional default value
+ 
+pool:
+  vmImage: 'windows-latest'  # Replace with a self-hosted pool if needed
+ 
+steps:
+  - task: PowerShell@2
+    inputs:
+      targetType: 'inline'
+      script: |
+        # Open the browser and navigate to the specified domain URL
+        Write-Host "Opening browser and navigating to ${{ parameters.domainURL }}"
+        start msedge "${{ parameters.domainURL }}"
+        
+        # Wait for the site to load and simulate registration for 60 seconds
+        Write-Host "Waiting for 60 seconds to simulate registration page hosting..."
+        Start-Sleep -Seconds 60
 
-jobs:
-  - job: Imagecreation
-    displayName: 'Image creation'
-    pool:
-      vmImage: 'ubuntu-latest'
-
-    variables:
-      tag: '$(Build.BuildId)-$(Build.SourceVersion)'  # Define a variable to store the tag
-
-    steps:
-      - task: PowerShell@2
-        inputs:
-          targetType: 'inline'
-          script: |
-            sudo docker run --privileged --rm tonistiigi/binfmt --install all
-
-      - task: PowerShell@2
-        inputs:
-          targetType: 'inline'
-          script: |
-            sudo docker buildx ls
-
-      - task: Docker@2
-        inputs:
-          containerRegistry: 'dockeimage-kings-test'
-          repository: 'kingsleywills/scanning'
-          command: 'buildAndPush'
-          Dockerfile: 'WebApplication1/Dockerfile'
-          tags: '$(tag)'  # Use the defined variable here
-        env:
-          DOCKER_CONTENT_TRUST: 'false'
-        displayName: 'Docker Build and Push'
-        continueOnError: true
-
-      - task: SSH@0
-        inputs:
-          sshEndpoint: 'docker-kings-ssh'
-          runOptions: 'inline'
-          inline: |
-            cd /home/syncfusion
-            docker stop boldbi || true  # To ignore if the container doesn't exist
-            docker rm -f boldbi || true  # To ignore if the container doesn't exist
-            docker run --name boldbi -p 80:80 -d kingsleywills/scanning:$(tag) > /dev/null 2>&1 # Use the defined variable here
-          readyTimeout: '20000'
-        continueOnError: true
+        # Simulate stopping at the 'Go to Dashboard Page'
+        Write-Host "Closing the browser to stop at the 'Go to Dashboard Page'"
+        Get-Process -Name "msedge" -ErrorAction SilentlyContinue | Stop-Process
