@@ -5,7 +5,7 @@ parameters:
   - name: domainURL
     displayName: domainURL
     type: string
-    default: "http://135.237.138.102:80"  # Optional default value
+    default: "https://docker-boldbi-test.boldbi.com"  # Optional default value
  
 pool:
   vmImage: 'windows-latest'  # Replace with a self-hosted pool if needed
